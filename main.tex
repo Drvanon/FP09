@@ -1,0 +1,26 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{physics}
+
+\usepackage{import}
+\usepackage{xifthen}
+\usepackage{pdfpages}
+\usepackage{transparent}
+
+\newcommand{\incfig}[1]{
+    \def\svgwidth{\columnwidth}
+    \import{./figures/}{#1.pdf_tex}
+}
+
+\title{FP09}
+\author{R. Dorstijn (sd249) \& Moritz Epping}
+\date{December 2020}
+
+\begin{document}
+\maketitle
+
+
+\end{document}
