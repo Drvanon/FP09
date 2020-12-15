@@ -1,5 +1,6 @@
 \documentclass[a4paper]{article}
 
+\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{mathtools}
@@ -24,7 +25,49 @@
 
 \section{Introduction}
 \subsection{General theoretical background}
-% Robin writes this
+Brains and computers often are compared because of their shared purpose,
+decision making, though they have irreconcilable differences in architecture.
+Modern computers function on the basis of the van Neumann
+architecture\cite{von-Neumann}, which separates the control unit from the memory
+and the computation unit. Though it simplifies the structure of the computer and
+makes it modular, it does create a clear bottleneck at the communication layer,
+commonly known as the von Neumann bottleneck. This creates an energy
+inefficiency that is absolutely unacceptable for biological systems like that of
+humans, who spend around 20\% of its total energy uptake on the brain\cite{metabolic-rates}.
+This most likely has provided significant evolutionary pressure for hominids to
+optimize metabolic resource usage\cite{seymour2016fossil}. For this reason a new
+architecture for computers has been suggested: neuromorphic\footnote{``Neuro''
+as in brain, ``-morphic'' as in having the shape of, forming ``having the shape
+of a brain''.} computing.
+
+Neurons (see fig \ref{fig:neuron}) are the basic computational components of the
+brain, transmitting and morphing signals. Each neuron receives signals from
+others at the dendrites, which shift the electric potential at the membrane of
+the cell at the site of the synapse\footnote{The connection point of two
+dendrites where the axon of one meets the dendrite of the other.}, creating an
+ion wave crossing the entire membrane of the neuron, reaching it's axon,
+allowing it to pass the signal on to other neurons.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/neuron.jpg}
+    \caption{Schematic image of a neuron, showing the dendrites, soma and axon.
+    Source: Pennsylvania State University}
+    \label{fig:neuron}
+\end{figure}
+
+The potential at the neuron membrane as a function of time is plotted in figure
+\ref{fig:action-potential}, here it is demonstrated how a potential shift caused
+by pre-synaptic\footnote{That is the neuron that passes on a signal to the
+post-synaptic one.} neurons initiates a spike in the membrane potential, which
+reaches a threshold value, causing an ion wave.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth]{figures/action-potential.png}
+    \caption{Formation of an action potential. Source: \\ \url{https://courses.lumenlearning.com/boundless-biology/chapter/how-neurons-communicate/}}
+    \label{fig:action-potential}
+\end{figure}
 
 \subsection{Background for the experiments}
 \subsubsection{Investigation of a single neuron}
@@ -42,6 +85,9 @@
 % Robin does this
 \subsubsection{Setup/Settings}
 \subsubsection{Results}
+
+\bibliography{main}
+\bibliographystyle{ieeetr}
 
 \section{Appendix}
 % Notebook PDFs here
