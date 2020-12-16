@@ -23,6 +23,7 @@
 
 \begin{document}
 \maketitle
+\clearpage
 
 \section{Introduction}
 \subsection{General theoretical background}
@@ -51,7 +52,7 @@ dendrites where the axon of one meets the dendrite of the other.}, creating an
 ion wave crossing the entire membrane of the neuron, reaching it's axon,
 allowing it to pass the signal on to other neurons.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{figures/neuron.jpg}
     \caption{Schematic image of a neuron, showing the dendrites, soma and axon.
@@ -66,7 +67,7 @@ post-synaptic one.} neurons initiates a spike in the membrane potential, which
 forces a release of ion containing vesicles at the terminal bulb, facilitating
 the transfer of the signal by changing the relative potential at the dendrites.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.6\textwidth]{figures/action-potential.png}
     \caption{Formation of an action potential. Source: \\ \url{https://courses.lumenlearning.com/boundless-biology/chapter/how-neurons-communicate/}}
@@ -75,7 +76,18 @@ the transfer of the signal by changing the relative potential at the dendrites.
 
 In order to emulate the behaviour electronically, a leaky integrate and fire
 (LIF) model is used. A single neuron is represented by an electronic circuit
-like the one in figure \ref{fig:circuit}.
+like the one in figure \ref{fig:circuit}. When the chip is not excited, nor
+inhibited there is a constant ``leak'' voltage present on the membrane,
+representing the biological rest potential of the membrane potential. When the
+threshold voltage $V_\text{thres}$, the amplifier functioning as a comparator in
+this setting, sends out a $V_{CC}$ signal to a digital unit that processes that
+the neuron has fired and is responsible for closing the switch that keeps the
+``membrane potential'' $V_m$ at some $V_\text{reset}$ for the refractory
+period. This time is meant to mimic the period the voltage at the membrane
+increases non-linearly and therefore loses its sensitivity to input. The digital
+processing unit is also responsible for sending the signal (regardless of if it
+is inhibitory or excitatory) to the neurons that the are connected to one that
+just fired.
 
 \begin{figure}
     \centering
@@ -98,11 +110,34 @@ like the one in figure \ref{fig:circuit}.
     \label{fig:circuit}
 \end{figure}
 
-
 \subsection{Background for the experiments}
 \subsubsection{Investigation of a single neuron}
 \subsubsection{Calibrating neuron parameters}
-% So on for all experiments
+In the case of a single unconnected neuron the membrane potential can be
+understood with application of the Kirchoff formula to simplification of the
+circuit in figure \ref{fig:circuit}.
+\[
+    C_m \frac{dV_m}{dt} = g_l(E_l - V_m)
+\]
+Clearly, this is a ordinary first order differential equation and has the
+solution
+\begin{equation}
+    V_m(t) = A \exp(\frac{-g_l}{C_m}t) - E_l
+    \label{eq:diff-eq-sol}
+\end{equation}
+where $A$ is given by the initial condition:
+\[
+    A = V_m(0) - E_l.
+\]
+
+In order to set a neuron to fire at a regular frequency $\tau$, we have to take
+into account that $V_m$ will be reset to $V_\text{reset}$ when it hits
+$V_\text{thres}$. Equation \eqref{eq:diff-eq-sol} can be rephrased in terms of
+$t$.
+\[
+    \tau = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
+    \frac{C_m}{g_l}
+\]
 
 \section{Execution \& Results}
 
