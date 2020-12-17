@@ -89,7 +89,7 @@ processing unit is also responsible for sending the signal (regardless of if it
 is inhibitory or excitatory) to the neurons that the are connected to one that
 just fired.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \begin{circuitikz}
         \draw (0, 0)    to node[midway, above]{$V_m$} (8, 0) node[op amp, anchor=+](A1){}; % main line
@@ -112,6 +112,49 @@ just fired.
 
 \subsection{Background for the experiments}
 \subsubsection{Investigation of a single neuron}
+A single neuron will be investigated, without considering any excitatory or
+inhibitory influences. This simplifies the circuit of figure \ref{fig:circuit}
+to the diagram in figure \ref{fig:circuit-simplified}. The relevant parameters
+that appear from this figure are:
+
+\begin{figure}[hb]
+    \centering
+    \begin{circuitikz}
+        \draw (0, 0)    node[ground] {}
+                        to[battery1, l=$E_l$]       ++(0, 2)
+                        to[vR, l=$g_l$]             ++(2, 0)
+                        to[C, l=$C_m$]              ++(2, 0)
+                        to[short]                   ++(0, -1)
+                        node[ground] {};
+        \draw (-2, 0)   node[below] {$V_\text{reset}$}
+                        to[normal open switch, o-]  ++(0, 2)
+                        to[short, -*]               ++(2, 0);
+    \end{circuitikz}
+    \caption{Circuit in figure \ref{fig:circuit} simplified for the scenario
+    that no signals are incoming for this particular neuron.}
+    \label{fig:circuit-simplified}
+\end{figure}
+
+\begin{itemize}
+    \item $E_l$ setting the \textit{amount} of potential leaking into the `membrane'.
+    \item $g_l$ determining how \textit{quickly} the potential leaks into the `membrane'.
+    \item $C_m$ describing how much potential is leaked to ground.
+    \item $V_\text{reset}$ prescribing the starting point of a cycle.
+\end{itemize}
+
+The last item in this list hints at that we do not yet know when the cycle will
+end. In the previous section it was stated that $V_\text{thres}$ determines
+this value. With this last variable in place it will now be possible to
+reconstruct the entire charging and resetting of the $V_m$, this period will be
+called $\tau_m$.
+
+However one item is missing: the refraction period. Recall that this is the
+period in which the neuron is `off' and does not take in input. Meaning that
+this time should be accounted for when calculating the total period.
+\[
+    \tau = \tau_m + \tau_\text{refrac}
+\]
+
 \subsubsection{Calibrating neuron parameters}
 In the case of a single unconnected neuron the membrane potential can be
 understood with application of the Kirchoff formula to simplification of the
