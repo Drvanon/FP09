@@ -157,8 +157,8 @@ this time should be accounted for when calculating the total period.
 
 \subsubsection{Calibrating neuron parameters}
 In the case of a single unconnected neuron the membrane potential can be
-understood with application of the Kirchoff formula to simplification of the
-circuit in figure \ref{fig:circuit}.
+understood with application of the Kirchoff formula to the circuit in figure
+\ref{fig:circuit-simplified}.
 \[
     C_m \frac{dV_m}{dt} = g_l(E_l - V_m)
 \]
@@ -173,12 +173,12 @@ where $A$ is given by the initial condition:
     A = V_m(0) - E_l.
 \]
 
-In order to set a neuron to fire at a regular frequency $\tau$, we have to take
+In order to set a neuron to fire at a regular frequency $\tau_m$, we have to take
 into account that $V_m$ will be reset to $V_\text{reset}$ when it hits
 $V_\text{thres}$. Equation \eqref{eq:diff-eq-sol} can be rephrased in terms of
 $t$.
 \[
-    \tau = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
+    \tau_m = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
     \frac{C_m}{g_l}
 \]
 
