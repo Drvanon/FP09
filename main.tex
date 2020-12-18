@@ -1,5 +1,6 @@
 \documentclass[a4paper]{article}
 
+\usepackage{siunitx}
 \usepackage{hyperref}
 \usepackage{circuitikz}
 \usepackage{amsmath}
@@ -74,6 +75,7 @@ the transfer of the signal by changing the relative potential at the dendrites.
     \label{fig:action-potential}
 \end{figure}
 
+\subsubsection{The LIF model}
 In order to emulate the behaviour electronically, a leaky integrate and fire
 (LIF) model is used. A single neuron is represented by an electronic circuit
 like the one in figure \ref{fig:circuit}. When the chip is not excited, nor
@@ -151,9 +153,10 @@ called $\tau_m$.
 However one item is missing: the refraction period. Recall that this is the
 period in which the neuron is `off' and does not take in input. Meaning that
 this time should be accounted for when calculating the total period.
-\[
+\begin{equation}
     \tau = \tau_m + \tau_\text{refrac}
-\]
+    \label{eq:tau}
+\end{equation}
 
 \subsubsection{Calibrating neuron parameters}
 In the case of a single unconnected neuron the membrane potential can be
@@ -182,7 +185,30 @@ $t$.
     \frac{C_m}{g_l}
 \]
 
+The characteristic time constant $\tau_c$ of the system can be found by setting
+$V_\text{thres}$ as a function of $E_l$ and $V_\text{reset}$.
+\[
+    V_\text{thres} = E_l - (E_l - V_\text{reset})\exp(-1)
+\]
+The resulting $\tau_c$ is then only dependent on $C_m$ and $g_l$:
+\begin{align*}
+    \tau_m &= -\ln(\frac{E_l - (E_l - (E_l - V_\text{reset})\exp(-1))}{V_\text{reset} - E_l}) \frac{C_m}{g_l}\\
+           &= -\ln(\frac{(E_l - V_\text{reset})\exp(-1))}{V_\text{reset} - E_l})\frac{C_m}{g_l} \\
+           &= \frac{C_m}{g_l} = \tau_c
+\end{align*}
+This time constant does not take into account the refractory period which should
+adds a fixed contribution. This was mentioned in equation \eqref{eq:tau}, but
+becomes relevant again when considering the total time.
+
+This describes a good theory of the neuron, however in reality there are some
+serious production artifacts that require calibration.
+
 \section{Execution \& Results}
+A rather interesting setup was provided by the university of Heidelberg. It
+hosted a SPIKEY chip on its grounds, which was physically inaccessible due to
+the COVID-19 crisis, therefore it was connected to a job manager that could be
+written to by the Jülich Supercomputing Center, which hosted Jupyter notebooks
+for this purpose. A SPIKEY chip implements the LIF model physically.
 
 \subsection{Investigation of a single neuron}
 % Moritz does this part
@@ -190,9 +216,61 @@ $t$.
 \subsubsection{Results}
 
 \subsection{Calibrating neuron parameters}
-% Robin does this
 \subsubsection{Setup/Settings}
+On the SPIKEY chip 4 neurons were isolated programmatically and given the same
+parameters:
+\begin{itemize}
+    \item $V_\text{reset}$: \SI{-80.0}{\milli\volt}
+    \item $V_\text{thresh}$: \SI{-55.0}{\milli\volt}
+    \item $E_\text{leak}$: \SI{-50.0}{\milli\volt}
+    \item $g_\text{leak}$:  \SI{20.0}{\nano\siemens}
+\end{itemize}
+
 \subsubsection{Results}
+This however resulted in wildly differing frequencies, as becomes visible in
+figure \ref{fig:4membranes}. In order to compensate for this $g_l$ was adjusted
+individually for all of the membranes so that they were all correct within their
+respective standard deviation: \SI{20.1}{\milli\volt}, \SI{55.0}{\milli\volt},
+\SI{60.0}{\milli\volt}, \SI{20.5}{\milli\volt}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{figures/4membranes.png}
+    \caption{Biological membrane potential of four membranes with the same
+    setting. The red dots indicate when the digital processing units recognizes
+    that voltage reaches the threshold. The rates for the signals are
+    \SI{1.02(2)e1}{\milli\second}, \SI{2.41(3)e1}{\milli\second},
+    \SI{2.36(1)e1}{\milli\second}, \SI{1.15(1)e1}{\milli\second}, in the same
+    order that they presented in the image. }
+    \label{fig:4membranes}
+\end{figure}
+
+The scale of the problem becomes even more clear when considering the that one
+half of the SPIKEY chip has a rate distribution like presented in figure
+\ref{fig:distribution}, the previous method of trial and error becomes rather
+infeasible.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{figures/rate-distribution.png}
+    \caption{Distribution of firing rate for the same across one side of the
+    chip.}
+    \label{fig:distribution}
+\end{figure}
+
+Instead an algorithm is suggested that should help find a proper calibration for
+all neurons that are able to converge on the desired rate.
+\begin{enumerate}
+    \item Set the $g_l$ to the default value and measure the rate of the neuron.
+    \item Set the $g_l$ to double the default value and measure the rate of the
+        neuron.
+    \item Describe the response of the neuron linearly using the last two
+        points and estimate where the desired rate would lie.
+    \item Set the $g_l$ to this value and measure the rate, if it is within the
+        standard error: success! If not return to step 3.
+\end{enumerate}
+Sadly we were unable to implement the algorithm, but we encourage the reader
+to.
 
 \bibliography{main}
 \bibliographystyle{ieeetr}
