@@ -5,3 +5,6 @@
 *.log
 *.blg
 *.toc
+.DS_Store
+.nvimlog
+main.dvi
