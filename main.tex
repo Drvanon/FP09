@@ -1,4 +1,6 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper,twocolumn]{article}
+
+\usepackage[left=1in, right=1in, top=0.5in, bottom=1in]{geometry}
 
 \usepackage{siunitx}
 \usepackage{hyperref}
@@ -24,9 +26,6 @@
 
 \begin{document}
 \maketitle
-\clearpage
-\tableofcontents
-\clearpage
 
 \section{Introduction}
 \subsection{General theoretical background}
@@ -57,7 +56,7 @@ allowing it to pass the signal on to other neurons.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{figures/neuron.jpg}
+    \includegraphics[width=.5\textwidth]{figures/neuron.jpg}
     \caption{Schematic image of a neuron, showing the dendrites, soma and axon.
     Source: Pennsylvania State University}
     \label{fig:neuron}
@@ -70,9 +69,9 @@ post-synaptic one.} neurons initiates a spike in the membrane potential, which
 forces a release of ion containing vesicles at the terminal bulb, facilitating
 the transfer of the signal by changing the relative potential at the dendrites.
 
-\begin{figure}[ht]
+\begin{figure}
     \centering
-    \includegraphics[width=.6\textwidth]{figures/action-potential.png}
+    \includegraphics[width=.5\textwidth]{figures/action-potential.png}
     \caption{Formation of an action potential. Source:  \url{https://courses.lumenlearning.com/boundless-biology/chapter/how-neurons-communicate/}}
     \label{fig:action-potential}
 \end{figure}
@@ -95,7 +94,7 @@ just fired.
 
 \begin{figure}[ht]
     \centering
-    \begin{circuitikz}
+    \begin{circuitikz}[scale = .6, transform shape]
         \draw (0, 0)    to node[midway, above]{$V_m$} (8, 0) node[op amp, anchor=+](A1){}; % main line
         \draw (A1.out)  to[short, l=$V_\text{out}$, -o] ++(1, 0);
         \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
@@ -247,7 +246,7 @@ respective standard deviation: \SI{20.1}{\milli\volt}, \SI{55.0}{\milli\volt},
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{figures/4membranes.png}
+    \includegraphics[width=.5\textwidth]{figures/4membranes.png}
     \caption{Biological membrane potential of four membranes with the same
     setting. The red dots indicate when the digital processing units recognizes
     that voltage reaches the threshold. The rates for the signals are
@@ -264,7 +263,7 @@ infeasible.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{figures/rate-distribution.png}
+    \includegraphics[width=.5\textwidth]{figures/rate-distribution.png}
     \caption{Distribution of firing rate for the same across one side of the
     chip.}
     \label{fig:distribution}
@@ -286,7 +285,11 @@ to.
 
 \subsection{A Single Neuron with Synaptic Input}
 \subsection{Short Term Plasticity}
+
 \subsection{Feed-Forward Networks}
+In nature, a single neuron firing has relatively little meaning until it is put
+in a larger context. Most of these contexts can be simplified by viewing them as
+`superpositions' feed forward networks.
 
 \subsubsection{Experimental setup/Settings}
 
