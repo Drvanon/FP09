@@ -69,7 +69,7 @@ post-synaptic one.} neurons initiates a spike in the membrane potential, which
 forces a release of ion containing vesicles at the terminal bulb, facilitating
 the transfer of the signal by changing the relative potential at the dendrites.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/action-potential.png}
     \caption{Formation of an action potential. Source:  \url{https://courses.lumenlearning.com/boundless-biology/chapter/how-neurons-communicate/}}
@@ -208,10 +208,34 @@ serious production artifacts that require calibration.
 \subsubsection{Short Term Plasticity}
 \subsubsection{Feed-Forward Networks}
 One of the simplest neural networks one can consider is the feed-forward
-network in which every network is arranged so that it passes on the signal it
-receives to
+network in which every neuron is arranged so that it passes on the signal it
+receives to the next. In nature, a single neuron firing has relatively little
+meaning until it is put in a larger context. Most of these contexts can be
+simplified by viewing them as `superpositions' feed forward networks. It is
+however important to consider that in nature robustness and redundancy is
+highly favored in critical systems. The function of a feed-forward network can
+be shutdown entirely if one neuron fails for whatever reason. Hence the concept
+of populations is introduced, these are groups of neurons that perform the same
+logical operations\footnote{That is to say, they are all either inhibitory or
+excitatory neurons, they have the same neurons as inputs and the share the same
+output neurons.} This is visualised in figure \ref{fig:feed-forward}.
 
-\subsubsection{Recurrent Netoworks}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/feedforward network.png}
+    \caption{Feed forward network with length 4 and population size 2. Two input
+        neurons are drawn additionally. Exhibitory neurons and connections are drawn
+        in red, inhibitory ones in blue.}
+    \label{fig:feed-forward}
+\end{figure}
+
+In this experiment, connection weights also become relevant for the first time.
+Any synaptic connection is assigned a weight, this weight represents the
+membrane potential increase that a signal transfer induces. The importance of
+this variable is crucial for networks as it nearly completely describes the
+behaviour of a network.
+
+\subsubsection{Recurrent Networks}
 \subsubsection{A Simple Computation: XOR}
 
 \section{Execution \& Results}
@@ -227,7 +251,6 @@ for this purpose. A SPIKEY chip implements the LIF model physically.
 \subsubsection{Results}
 
 \subsection{Calibrating neuron parameters}
-\subsubsection{Setup/Settings}
 On the SPIKEY chip 4 neurons were isolated programmatically and given the same
 parameters:
 \begin{itemize}
@@ -237,7 +260,6 @@ parameters:
     \item $g_\text{leak}$:  \SI{20.0}{\nano\siemens}
 \end{itemize}
 
-\subsubsection{Results}
 This however resulted in wildly differing frequencies, as becomes visible in
 figure \ref{fig:4membranes}. In order to compensate for this $g_l$ was adjusted
 individually for all of the membranes so that they were all correct within their
@@ -287,15 +309,52 @@ to.
 \subsection{Short Term Plasticity}
 
 \subsection{Feed-Forward Networks}
-In nature, a single neuron firing has relatively little meaning until it is put
-in a larger context. Most of these contexts can be simplified by viewing them as
-`superpositions' feed forward networks.
+A feed-forward network is described by the population number, the chain length
+(see figure \ref{fig:feed-forward}) and the several weights of the following
+type connections:
+\begin{itemize}
+    \item From the initial excitatory neuron to the first excitatory member of the
+        chain. (ex0 $\rightarrow$ ex)
+    \item From the initial excitatory neuron to the first inhibitory member of the
+        chain. (ex0 $\rightarrow$ inh)
+    \item From an excitatory neuron in the chain to the next excitatory neuron.
+        (ex $\rightarrow$ ex)
+    \item From an excitatory neuron in the chain to the next inhibitory neuron.
+        (ex $\rightarrow$ inh)
+    \item From an inhibitory neuron in the chain to the next excitatory neuron.
+        (inh $\rightarrow$ ex)
+\end{itemize}
+This coincidentally is also the order of sensitivity (top being most sensitive),
+particularly when discussing the `width' of the signal. With this is meant the
+the amount of consequent signals that follow a single input signal. When having
+a large population, a high (inh $\rightarrow$ ex) wheight was capable of
+stopping the signal before it would reach the last neuron.
 
-\subsubsection{Experimental setup/Settings}
+An issue that occurred as the chain length was increased the width of the signal
+did as well. A length of 60 was reached creating a width of 10. This worked for
+low populations, however with higher populations the membrane voltage was
+overall raised to such a degree that the neurons started firing randomly and the
+signal was lost. The theoretical maximum amount of neurons that could be used in
+a chain is 192, so that for a population of size $n$ the max chain length
+$c_\text{max}$ would be $c_\text{max} = 192 / n$.
 
-\subsubsection{Results}
+An interesting phenomena occurs when the network is configured to loop. That is
+to say the last neuron excites the first. Sadly it was not possible to set the
+signal delay, which would have allowed for more careful investigation, but still
+there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 
-\subsection{Recurrent Netoworks}
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/feedforward signals loop.png}
+    \caption{Feed-forward network configured in a loop. The population is 5, as
+        is the chain length. Note that at the end the width starts to increase.
+        The top figure shows all signals send by the neurons. The blue area
+        represents inhibitory neurons, the red excitatory. The bottom figure
+        shows the membrane potential of the first excitatory neuron.}
+    \label{fig:feed-forward-loop}
+\end{figure}
+
+\subsection{Recurrent Networks}
 \subsection{A Simple Computation: XOR}
 
 \bibliography{main}
