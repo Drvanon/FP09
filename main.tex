@@ -242,7 +242,6 @@ this variable is crucial for networks as it nearly completely describes the
 behaviour of a network.
 
 \subsubsection{Recurrent Networks}
-\subsubsection{A Simple Computation: XOR}
 
 \section{Execution \& Results}
 A rather interesting setup was provided by the university of Heidelberg. It
@@ -315,6 +314,7 @@ to.
 \subsection{Short Term Plasticity}
 
 \subsection{Feed-Forward Networks}
+\label{sec:feed-forward}
 A feed-forward network is described by the population number, the chain length
 (see figure \ref{fig:feed-forward}) and the several weights of the following
 type connections:
@@ -361,7 +361,70 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 \end{figure}
 
 \subsection{Recurrent Networks}
+
 \subsection{A Simple Computation: XOR}
+A very common binary operation that is particularly non-linear (and therefore
+more complex) is the XOR operation. It can be described with the truth
+table \ref{tab:XOR}.
+\begin{table}
+    \centering
+    \begin{tabular}{c | c | c}
+        A & B & Q \\ \hline
+        0 & 0 & 0 \\
+        0 & 1 & 1 \\
+        1 & 0 & 1 \\
+        1 & 1 & 0
+    \end{tabular}
+    \caption{Truth table of the XOR gate. For more information see: \cite{horowitz_hill_2020}}
+    \label{tab:XOR}
+\end{table}
+A simple solution for this problem is presented in figure
+\ref{fig:XOR-suggested}, however this was not used, as the institute provided a
+different network architecture that has significant benefits over the suggested
+one: it is much more robust to what is called referred to with `width' in
+section \ref{sec:feed-forward}. The inhibitory neurons that are operating in a
+recurrent fashion prevent leaking voltage from causing the any excitatory
+neuron in the network to fire out of line. This is especially important in an
+XOR gate, as the chance that noise would `cancel out' is negligible.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/XOR-suggestion.png}
+    \caption{Suggestion for a network that behaves like an XOR gate. Note that
+        the inhibitory weight has to be strong, so that it can inhibit the output
+        from signalling, even when it receives an input from both sides.}
+    \label{fig:XOR-suggested}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/XOR-used.png}
+    \caption{Network that was used to test the ability of neurons to perform
+        logical operations. Functions as an XOR gate, similarly to the network
+        presented in figure \ref{fig:XOR-suggested}.}
+    \label{fig:XOR-used}
+\end{figure}
+
+A challenge that comes with a network like this is to find the correct set of
+weights in order for the network to operate as expected. This was achieved by
+plotting all signals sent in the same graph, like was done in figure
+\ref{fig:XOR-output}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/XOR-output.png}
+    \caption{Diagnostic output of an XOR network with an architecture as that of
+        \ref{fig:XOR-suggested}. Here the input is `jittered': shifted in time
+        slightly in order to inspect the robustness of the network. Clearly it is not
+        doing so well.}
+    \label{fig:XOR-output}
+\end{figure}
+
+It is possible to get into an impossible situation when performing the
+configuration, namely that changing a weight worsens the output and no other
+setting improves the situation. In such a scenario it has been found helpful to
+increase the population size for each neuron. Though the starting population was
+2, 4 were needed to get acceptable output.
 
 \bibliography{main}
 \bibliographystyle{ieeetr}
