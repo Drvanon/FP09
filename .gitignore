@@ -7,4 +7,5 @@
 *.toc
 .DS_Store
 .nvimlog
-main.dvi
+*.dvi
+*.synctex.gz
