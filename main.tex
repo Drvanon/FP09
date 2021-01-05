@@ -120,7 +120,7 @@ just fired.
 \begin{figure}[ht]
     \centering
     \begin{circuitikz}[scale = .6, transform shape]
-        \draw (0, 0)    to node[midway, above]{$V_m$} (8, 0) node[op amp, anchor=+](A1){}; % main line
+        \draw (0, 0)    to node[midway, above]{$V_m$} (8.5, 0) node[op amp, anchor=+](A1){}; % main line
         \draw (A1.out)  to[short, l=$V_\text{out}$, -o] ++(1, 0);
         \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
         \draw (0, 0)    to[vR, l=$g_l$, *-] (0, -2)
@@ -133,6 +133,14 @@ just fired.
                         node[ground] {} (6, -2);
         \draw (8, -3)   to[short, l_=$V_\text{reset}$, o-] (8, -1)
                         to[normal open switch, -*] (8, 0);
+        \draw (7.5, -2) node[anchor=north] {$V_\text{reset}$}
+                        to[short, o-] (7.5, -1)
+                        to[normal open switch, -*] (7.5, 0);
+        \draw [densely dashed]
+              (3.3, -4) --++(0, 4.6)
+                        --++(5, 0)
+                        --++(0, -4.6)
+                        --++(-5, 0);
     \end{circuitikz}
     \caption{Circuit of a single neuron in a LIF chip.}
     \label{fig:circuit}
@@ -193,14 +201,22 @@ this time should be accounted for when calculating the total period.
     \label{eq:tau}
 \end{equation}
 
-Our final goal is to determine whether the spikey chip is a suitable hardware for neuromorphic computing.  Before eventually testing the chip in configurations that are actually capable of computations,  it is sensible to verify that the most basic circuit is working as desired.  Hence we split the LIF model circuit and only consider a neuron without output (neither excitatory nor inhibitory).  By setting the leakage potential above the threshold, we bring the circuit into a continuous firing regime. \par
-\textit{Threshold Voltage} $V_{th}$ and \textit{reset voltage} $E_r$ can be specified by the user.  We run the circuit,  record the voltage of a neuron as a function of time and plot our results.
+Our final goal is to determine whether the spikey chip is a suitable hardware for 
+neuromorphic computing.  Before eventually testing the chip in configurations 
+that are actually capable of computations,  it is sensible to verify that the 
+most basic circuit is working as desired.  Hence we split the LIF model circuit 
+and only consider a neuron without output (neither excitatory nor inhibitory).  
+By setting the leakage potential above the threshold, we bring the circuit into 
+a continuous firing regime. \par
+\textit{Threshold Voltage} $V_{th}$ and \textit{reset voltage} $E_r$ can be 
+specified by the user.  We run the circuit,  record the voltage of a neuron as 
+a function of time and plot our results.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/fp_task1_1membrane.png}
     \caption{Voltage over a single neuron with leakage potential over threshold potential}
-    \label{fig:feed-forward}
+    \label{fig:membranes_ex1}
 \end{figure}
 
 The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery of the voltaage we observed strong fluctuations of the reset voltage.  We furthermore calculated the time between spikes and found a value of $t_{fir} = (16.10\pm 0.11)$ ms.
@@ -311,6 +327,7 @@ to.
 \subsection{Short Term Plasticity}
 
 \subsection{Feed-Forward Networks}
+\label{sec:feed-forward}
 %% Robin  %%
 
 %theory
@@ -390,10 +407,105 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 
 \subsection{Recurrent Networks}
 \subsection{A Simple Computation: XOR}
+A very common binary operation that is particularly non-linear (and therefore
+more complex) is the XOR operation. It can be described with the truth
+table \ref{tab:XOR}.
+\begin{table}
+    \centering
+    \begin{tabular}{c | c | c}
+        A & B & Q \\ \hline
+        0 & 0 & 0 \\
+        0 & 1 & 1 \\
+        1 & 0 & 1 \\
+        1 & 1 & 0
+    \end{tabular}
+    \caption{Truth table of the XOR gate. For more information see: \cite{horowitz_hill_2020}}
+    \label{tab:XOR}
+\end{table}
+A simple solution for this problem is presented in figure
+\ref{fig:XOR-suggested}, however this was not used, as the institute provided a
+different network architecture that has significant benefits over the suggested
+one: it is much more robust to what is called referred to with `width' in
+section \ref{sec:feed-forward}. The inhibitory neurons that are operating in a
+recurrent fashion prevent leaking voltage from causing the any excitatory
+neuron in the network to fire out of line. This is especially important in an
+XOR gate, as the chance that noise would `cancel out' is negligible.
+more complex) is the XOR operation. It can be described with the truth
+table \ref{tab:XOR}.
+\begin{table}
+    \centering
+    \begin{tabular}{c | c | c}
+        A & B & Q \\ \hline
+        0 & 0 & 0 \\
+        0 & 1 & 1 \\
+        1 & 0 & 1 \\
+        1 & 1 & 0
+    \end{tabular}
+    \caption{Truth table of the XOR gate. For more information see: \cite{horowitz_hill_2020}}
+    \label{tab:XOR}
+\end{table}
+A simple solution for this problem is presented in figure
+\ref{fig:XOR-suggested}, however this was not used, as the institute provided a
+different network architecture that has significant benefits over the suggested
+one: it is much more robust to what is called referred to with `width' in
+section \ref{sec:feed-forward}. The inhibitory neurons that are operating in a
+recurrent fashion prevent leaking voltage from causing the any excitatory
+neuron in the network to fire out of line. This is especially important in an
+XOR gate, as the chance that noise would `cancel out' is negligible.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/XOR-suggestion.png}
+    \caption{Suggestion for a network that behaves like an XOR gate. Note that
+        the inhibitory weight has to be strong, so that it can inhibit the output
+        from signalling, even when it receives an input from both sides.}
+    \label{fig:XOR-suggested}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/XOR-used.png}
+    \caption{Network that was used to test the ability of neurons to perform
+        logical operations. Functions as an XOR gate, similarly to the network
+        presented in figure \ref{fig:XOR-suggested}.}
+    \label{fig:XOR-used}
+\end{figure}
+
+A challenge that comes with a network like this is to find the correct set of
+weights in order for the network to operate as expected. This was achieved by
+plotting all signals sent in the same graph, like was done in figure
+\ref{fig:XOR-output}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/XOR-output.png}
+    \caption{Diagnostic output of an XOR network with an architecture as that of
+        \ref{fig:XOR-suggested}. Here the input is `jittered': shifted in time
+        slightly in order to inspect the robustness of the network. Clearly it is not
+        doing so well.}
+    \label{fig:XOR-output}
+\end{figure}
+
 
 \section{Conclusions}
-Our results cleary show that the Spikey Chip can be used for neuromorphic computing.  IMost importantly,  we could verify that the elementary building block (LIF-circuit) behaved in a very favourable way.  Different characteristic features in different realizations of that circuit in the hardware (due to production errors) can be observed but we showed how to calibrate each circuit in a way that the effect of production errors is cancelled.  We clearly saw how this circuit allows short term plasticity,  a key trait of neurons that allow them to 'learn'.  Finally,  leaving the few-neuron regime,  we verified that the hardware can actually be used to model circuits with $\approx 200$ neurons.  In the final exercise we even showed how we can perform logical operations with these large arrays of neurons.\par
-Comparing our quite complicated realization of the XOR-gate to the standard (much more simple) circuit in digital computing leads us to one final important insight: When switching computer hardware to neuromorphic hardware, it does not suffice to merely copy the architecture from standard computers and furthermore translate each gate.  This leads to messy circuits and an enormous amount of neurons required.  Instead,  it is key to also adapt the way of computation to the biological blueprint of our basic computation components.  This leads to radically new ways of computer design...... [rework!!!]
+Our results cleary show that the Spikey Chip can be used for neuromorphic
+computing.  IMost importantly,  we could verify that the elementary building 
+block (LIF-circuit) behaved in a very favourable way.  Different characteristic
+features in different realizations of that circuit in the hardware (due to production errors) can be observed but we showed how to calibrate each circuit
+in a way that the effect of production errors is cancelled.  We clearly saw 
+how this circuit allows short term plasticity,  a key trait of neurons that 
+allow them to 'learn'.  Finally,  leaving the few-neuron regime,  we verified 
+that the hardware can actually be used to model circuits with $\approx 200$
+neurons.  In the final exercise we even showed how we can perform logical 
+operations with these large arrays of neurons.\par
+Comparing our quite complicated realization of the XOR-gate to the standard 
+(much more simple) circuit in digital computing leads us to one final important 
+insight: When switching computer hardware to neuromorphic hardware, it does 
+not suffice to merely copy the architecture from standard computers and 
+furthermore translate each gate.  This leads to messy circuits and an enormous 
+amount of neurons required.  Instead,  it is key to also adapt the way of 
+computation to the biological blueprint of our basic computation components.  
+This leads to radically new ways of computer design...... [rework!!!]
 
 
 \bibliography{main}
