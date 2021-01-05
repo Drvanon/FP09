@@ -45,11 +45,13 @@
 \twocolumn[
   \begin{@twocolumnfalse}
     \begin{abstract}
-		In this paper we examine the Spikey Chip for neuromorphic computing,
-
-
+        In this paper we examine the SPIKEY Chip for neuromorphic computing and
+        come to the conclusion that though it is useful for prototyping neural
+        networks in a hardware fashion, it is likely not ready for real life
+        applications as the electronics are too sensitive to environmental
+        factors. Methods for calibrating individual neurons as well as networks
+        are suggested.
     \end{abstract}
-
   \end{@twocolumnfalse}
 ]
 \section{Motivation and Theory}
@@ -71,7 +73,7 @@ as in brain, ``-morphic'' as in having the shape of, forming ``having the shape
 of a brain''.} computing.
 
 \subsubsection{Signal processing in the brain}
-Neurons (see fig \ref{fig:neuron}) are the basic computational components of the
+Neurons are the basic computational components of the
 brain, transmitting and morphing signals. Each neuron receives signals from
 others at the dendrites, which shift the electric potential at the membrane of
 the cell at the site of the synapse\footnote{The connection point of two
@@ -79,20 +81,15 @@ dendrites where the axon of one meets the dendrite of the other.}, creating an
 ion wave crossing the entire membrane of the neuron, reaching it's axon,
 allowing it to pass the signal on to other neurons.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=.5\textwidth]{figures/neuron.jpg}
-    \caption{Schematic image of a neuron, showing the dendrites, soma and axon.
-    Source: Pennsylvania State University}
-    \label{fig:neuron}
-\end{figure}
-
 The potential at the neuron membrane as a function of time is plotted in figure
 \ref{fig:action-potential}, here it is demonstrated how a potential shift caused
 by pre-synaptic\footnote{That is the neuron that passes on a signal to the
 post-synaptic one.} neurons initiates a spike in the membrane potential, which
-forces a release of ion containing vesicles at the terminal bulb, facilitating
-the transfer of the signal by changing the relative potential at the dendrites.
+forces a release of ion containing vesicles at the terminal
+bulb\footnote{\textbf{Terminal bulb}: the collections of appendages at the end
+of the axon that it uses to pass the signal on to connected neurons.},
+facilitating the transfer of the signal by changing the relative potential at
+the dendrites.
 
 \begin{figure}[ht]
     \centering
@@ -388,8 +385,8 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 \subsection{Recurrent Networks}
 \subsection{A Simple Computation: XOR}
 A very common binary operation that is particularly non-linear (and therefore
-more complex) is the XOR operation. It can be described with the truth
-table \ref{tab:XOR}.
+more complex) is the XOR operation. It can be described with the truth table
+\ref{tab:XOR}.
 \begin{table}
     \centering
     \begin{tabular}{c | c | c}
@@ -399,7 +396,8 @@ table \ref{tab:XOR}.
         1 & 0 & 1 \\
         1 & 1 & 0
     \end{tabular}
-    \caption{Truth table of the XOR gate. For more information see: \cite{horowitz_hill_2020}}
+    \caption{Truth table of the XOR gate. For more information see:
+    \cite{horowitz_hill_2020}}
     \label{tab:XOR}
 \end{table}
 A simple solution for this problem is presented in figure
@@ -407,31 +405,9 @@ A simple solution for this problem is presented in figure
 different network architecture that has significant benefits over the suggested
 one: it is much more robust to what is called referred to with `width' in
 section \ref{sec:feed-forward}. The inhibitory neurons that are operating in a
-recurrent fashion prevent leaking voltage from causing the any excitatory
-neuron in the network to fire out of line. This is especially important in an
-XOR gate, as the chance that noise would `cancel out' is negligible.
-more complex) is the XOR operation. It can be described with the truth
-table \ref{tab:XOR}.
-\begin{table}
-    \centering
-    \begin{tabular}{c | c | c}
-        A & B & Q \\ \hline
-        0 & 0 & 0 \\
-        0 & 1 & 1 \\
-        1 & 0 & 1 \\
-        1 & 1 & 0
-    \end{tabular}
-    \caption{Truth table of the XOR gate. For more information see: \cite{horowitz_hill_2020}}
-    \label{tab:XOR}
-\end{table}
-A simple solution for this problem is presented in figure
-\ref{fig:XOR-suggested}, however this was not used, as the institute provided a
-different network architecture that has significant benefits over the suggested
-one: it is much more robust to what is called referred to with `width' in
-section \ref{sec:feed-forward}. The inhibitory neurons that are operating in a
-recurrent fashion prevent leaking voltage from causing the any excitatory
-neuron in the network to fire out of line. This is especially important in an
-XOR gate, as the chance that noise would `cancel out' is negligible.
+recurrent fashion prevent leaking voltage from causing the any excitatory neuron
+in the network to fire out of line. This is especially important in an XOR gate,
+as the chance that noise would `cancel out' is negligible.
 
 \begin{figure}
     \centering
@@ -497,6 +473,8 @@ amount of neurons required.  Instead,  it is key to also adapt the way of
 computation to the biological blueprint of our basic computation components.
 This leads to radically new ways of computer design...... [rework!!!]
 
+% In the reworking the temporal instability of the network should be mentioned
+% in order to match with the abstract.
 
 \bibliography{main}
 \bibliographystyle{ieeetr}
