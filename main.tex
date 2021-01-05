@@ -201,15 +201,15 @@ this time should be accounted for when calculating the total period.
     \label{eq:tau}
 \end{equation}
 
-Our final goal is to determine whether the spikey chip is a suitable hardware for 
-neuromorphic computing.  Before eventually testing the chip in configurations 
-that are actually capable of computations,  it is sensible to verify that the 
-most basic circuit is working as desired.  Hence we split the LIF model circuit 
-and only consider a neuron without output (neither excitatory nor inhibitory).  
-By setting the leakage potential above the threshold, we bring the circuit into 
+Our final goal is to determine whether the spikey chip is a suitable hardware for
+neuromorphic computing.  Before eventually testing the chip in configurations
+that are actually capable of computations,  it is sensible to verify that the
+most basic circuit is working as desired.  Hence we split the LIF model circuit
+and only consider a neuron without output (neither excitatory nor inhibitory).
+By setting the leakage potential above the threshold, we bring the circuit into
 a continuous firing regime. \par
-\textit{Threshold Voltage} $V_{th}$ and \textit{reset voltage} $E_r$ can be 
-specified by the user.  We run the circuit,  record the voltage of a neuron as 
+\textit{Threshold Voltage} $V_{th}$ and \textit{reset voltage} $E_r$ can be
+specified by the user.  We run the circuit,  record the voltage of a neuron as
 a function of time and plot our results.
 
 \begin{figure}[ht]
@@ -479,32 +479,42 @@ plotting all signals sent in the same graph, like was done in figure
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth]{figures/XOR-output.png}
-    \caption{Diagnostic output of an XOR network with an architecture as that of
-        \ref{fig:XOR-suggested}. Here the input is `jittered': shifted in time
-        slightly in order to inspect the robustness of the network. Clearly it is not
-        doing so well.}
+    \caption{Diagnostic output of an XOR network with an architecture as
+        represented in figure \ref{fig:XOR-suggested}. Here the input is
+        `jittered': shifted in time slightly in order to inspect the robustness
+        of the network. Clearly it is not doing so well.}
     \label{fig:XOR-output}
 \end{figure}
 
+It quickly became clear that though a temporarily optimal configuration had been
+found, it was not to last long, as a mere half hour later the accuracy had
+dropped from 39/40 to 33/40. However the accuracy was large enough to show that
+as the input was temporally shifted using a normal distribution, it did not
+immediately lose it's accuracy. Only after the FWHM of the jitter became larger
+than 15 milliseconds, the accuracy dropped below unrecognizable. This is
+remarkable fact is likely due to the fact that the potential does not
+immediately decay to the rest potential but remains high for some some time.
+This could be useful in applications where signals are not perfectly timed, but
+relative simultaneity is required.
 
 \section{Conclusions}
-Our results cleary show that the Spikey Chip can be used for neuromorphic
-computing.  IMost importantly,  we could verify that the elementary building 
-block (LIF-circuit) behaved in a very favourable way.  Different characteristic
+Our results clearly show that the SPIKEY chip can be used for neuromorphic
+computing. Most importantly,  we could verify that the elementary building
+block (LIF-circuit) behaved in a very favourable way. Different characteristic
 features in different realizations of that circuit in the hardware (due to production errors) can be observed but we showed how to calibrate each circuit
-in a way that the effect of production errors is cancelled.  We clearly saw 
-how this circuit allows short term plasticity,  a key trait of neurons that 
-allow them to 'learn'.  Finally,  leaving the few-neuron regime,  we verified 
+in a way that the effect of production errors is cancelled.  We clearly saw
+how this circuit allows short term plasticity,  a key trait of neurons that
+allow them to 'learn'.  Finally,  leaving the few-neuron regime,  we verified
 that the hardware can actually be used to model circuits with $\approx 200$
-neurons.  In the final exercise we even showed how we can perform logical 
+neurons.  In the final exercise we even showed how we can perform logical
 operations with these large arrays of neurons.\par
-Comparing our quite complicated realization of the XOR-gate to the standard 
-(much more simple) circuit in digital computing leads us to one final important 
-insight: When switching computer hardware to neuromorphic hardware, it does 
-not suffice to merely copy the architecture from standard computers and 
-furthermore translate each gate.  This leads to messy circuits and an enormous 
-amount of neurons required.  Instead,  it is key to also adapt the way of 
-computation to the biological blueprint of our basic computation components.  
+Comparing our quite complicated realization of the XOR-gate to the standard
+(much more simple) circuit in digital computing leads us to one final important
+insight: When switching computer hardware to neuromorphic hardware, it does
+not suffice to merely copy the architecture from standard computers and
+furthermore translate each gate.  This leads to messy circuits and an enormous
+amount of neurons required.  Instead,  it is key to also adapt the way of
+computation to the biological blueprint of our basic computation components.
 This leads to radically new ways of computer design...... [rework!!!]
 
 
