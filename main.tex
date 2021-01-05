@@ -146,8 +146,6 @@ just fired.
     \label{fig:circuit}
 \end{figure}
 
-
-
 \section{Execution \& Results}
 A rather interesting setup was provided by the university of Heidelberg. It
 hosted a SPIKEY chip on its grounds, which was physically inaccessible due to
@@ -159,26 +157,8 @@ for this purpose. A SPIKEY chip implements the LIF model physically.
 %% Moritz  %%
 A single neuron will be investigated, without considering any excitatory or
 inhibitory influences. This simplifies the circuit of figure \ref{fig:circuit}
-to the diagram in figure \ref{fig:circuit-simplified}. The relevant parameters
+to the dashed square drawn inside of it. The relevant parameters
 that appear from this figure are:
-
-\begin{figure}[hb]
-    \centering
-    \begin{circuitikz}
-        \draw (0, 0)    node[ground] {}
-                        to[battery1, l=$E_l$]       ++(0, 2)
-                        to[vR, l=$g_l$]             ++(2, 0)
-                        to[C, l=$C_m$]              ++(2, 0)
-                        to[short]                   ++(0, -1)
-                        node[ground] {};
-        \draw (-2, 0)   node[below] {$V_\text{reset}$}
-                        to[normal open switch, o-]  ++(0, 2)
-                        to[short, -*]               ++(2, 0);
-    \end{circuitikz}
-    \caption{Circuit in figure \ref{fig:circuit} simplified for the scenario
-    that no signals are incoming for this particular neuron.}
-    \label{fig:circuit-simplified}
-\end{figure}
 
 \begin{itemize}
     \item $E_l$ setting the \textit{amount} of potential leaking into the `membrane'.
