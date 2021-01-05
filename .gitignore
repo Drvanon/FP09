@@ -9,3 +9,4 @@
 .nvimlog
 *.dvi
 *.synctex.gz
+.ipynb_checkpoints/
