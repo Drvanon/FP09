@@ -24,8 +24,44 @@
 
 \begin{frame}
     %%%
-    \frametitle{Theoretical Overview}
-    %%%    
+    \frametitle{Motivation}
+   	\begin{itemize}
+   		\item Goals of Neuromorphic Computing:
+   		\begin{enumerate}
+   			\item Building more efficient computers (Von-Neumann Bottleneck vs.  Evolution)
+   			\item  Understanding brain by trying to rebuild it!	
+   		\end{enumerate}
+   		\bigskip
+   		\item Proposed Architecture: SPIKEY (Heidelberg)
+   		\begin{enumerate}
+   			\item What are basic properties neuromorphic computing devices must fulfill?
+   			\item Does SPIKEY fulfill these properties?
+   			\item How well can we use it for more complicated purposes?
+   		\end{enumerate}
+   	\end{itemize}
+\end{frame}
+
+\begin{frame}
+    %%%
+    \frametitle{Theoretical Overview - Neurons}
+   	\begin{itemize}
+   		\item Biological Neuron
+   		\begin{itemize}
+   			\item Basic computational units of the brain
+   			\item Electronic information processing
+   			\item Receive input signals (ion waves) via \textbf{dendrites}
+   			\item Depending on input: Create a signal
+   			\item Transmit signal to other neurons
+   		\end{itemize}
+   		
+   		\item Electronical Analogy: LIF - Circuit
+   		\begin{itemize}
+   			\item \textbf{L}eaky \textbf{I}ntegrate and \textbf{F}ire
+   			\item Treat neuron as capacitor
+   			\item Currents charging / decharging it (input)
+   			\item Op-Amp: Compare capacitor voltage to \textit{threshold voltage},  if $V\geq V_{th}$ then spike
+   		\end{itemize}
+   	\end{itemize}
 \end{frame}
 
 \begin{frame}
