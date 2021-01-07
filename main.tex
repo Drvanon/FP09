@@ -320,11 +320,31 @@ It already became apparent that noise plays an important role (in fact it is ver
 strong for a single potential).  Two types of noise need to be distinguished here: 
 The temporal noise (different executions of the same process) and the neuron-to 
 neuron noise (fixed pattern; due to production errors).
-
+%% Here 3 --> fire
+By changing the stimulus type we can obtain stacked EPSPs on the membrane.  By 
+reducing the temporal distance between them we can make the neuron fire, provided 
+the threshold is not set to a large value.  We furthermore compare the relative 
+heights of the PSPs with the previous fixed-pattern noise results.
 
 \subsection{Short Term Plasticity}
-
-
+Short-term plasticity (STP) is a key feature of neurons that allows learning. 
+\textit{Plasticity} refers to the ability of changing synapse weights dynamically.  
+We implement short-term plasticity with a simplified Tsodyks-Markram model.  According 
+to this model,  neurotransmitters of a synapse are modeled as being in one of 
+three states: Recovered (\textbf{R}),  Effective (\textbf{E}),  Inactive 
+(\textbf{I}).  The behaviour of a synapse is determined by the parameters $\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according to 
+\begin{align*}
+	R + E + I &= 1 \\
+	\frac{dE}{dt} &= - \frac{E}{\tau_\text{facil}} + \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
+	\frac{dR}{dt} &= - \frac{I}{\tau_\text{rec}} - \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
+\end{align*}
+We first test the behaviour of the spike chip with the depressing mode.  (vary 
+dist. init. spikes,  vary dist. to final spike,  change U?).   %%% insert 1.
+We then disable STP and verify that the local firing history of the synapse 
+indeed does not have an effect on the membrane potential as a response to the spike 
+anymore.  %%% insert 2 
+Finally,  we investigate a facilitating synapse and again do... (vary  dist. init. 
+spikes,  vary dist. to final spike,  change U?). %%insert 3.
 
 
 \subsection{Feed-Forward Networks}
@@ -407,6 +427,7 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 \end{figure}
 
 \subsection{Recurrent Networks}
+
 \subsection{A Simple Computation: XOR}
 A very common binary operation that is particularly non-linear (and therefore
 more complex) is the XOR operation. It can be described with the truth table
