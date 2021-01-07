@@ -313,8 +313,46 @@ computations.  We now want to evaluate how a single neuron behaves under the inf
  spike train allows us to average out these fluctuations.  The spike triggered average 
  height of the post synaptic potentials is a good measure of the strength of the signal.  
  Furthermore,  we measure the time scale on which the potential decays.  
- %% Here: 1. --> effect of changing parameters drvifall,  drviout: single 
- result and averaged out one  (<50)
+The parameters can be chosen from these ranges:
+\begin{align*}
+	\text{drviout} &\in \left[ 0.013, 1.667  \right] \\
+	\text{drvifall} &\in \left[ 0.02,  2.5  \right] 
+\end{align*}
+We pick as default values approximately the mean of these intervals and 
+investigate for each parameter both extremes.  Default: $\text{drviout} := 0.80$ 
+and $\text{drvifall}=1.3$.  
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/epsp_default.pdf}
+    \caption{Post synaptic potential for default settings of parameters}
+    \label{fig:feed-forward}
+\end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/epsp_out_-.pdf}
+    \caption{EPSP for low drviout.}
+    \label{fig:feed-forward}
+\end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/epsp_out_+.pdf}
+    \caption{EPSP for high drviout.}
+    \label{fig:feed-forward}
+\end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/epsp_fall_-.pdf}
+    \caption{EPSP for low drvifall.}
+    \label{fig:feed-forward}
+\end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/epsp_fall_+.pdf}
+    \caption{EPSP for high drvifall.}
+    \label{fig:feed-forward}
+\end{figure}
+We conclude that reducing drvifall leads to higher spikes while reducing drviout 
+leads to more slowly decaying (and lower) spikes.
 The ability of a neuron to perform computations (decisions) comes from the fact 
 that it can interpret specific spikes from input neurons as either suggesting 
 a likely decision (excitatory,  making spike more likely) or  a less likely decision 
