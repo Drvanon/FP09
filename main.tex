@@ -301,7 +301,31 @@ Sadly we were unable to implement the algorithm, but we encourage the reader
 to.
 
 \subsection{A Single Neuron with Synaptic Input}
+Interconnectivity between neurons is crucial since this is the basis of 
+computations.  We now want to evaluate how a single neuron behaves under the influence
+ of a synaptic input.  To do that,  we stimulate one hardware neuron with a synapse 
+ and record its membrane potential.  The readout signal is subject to significant 
+ noise which is due to the read-out process.  Stimulating the neuron with a regular 
+ spike train allows us to average out these fluctuations.  The spike triggered average 
+ height of the post synaptic potentials is a good measure of the strength of the signal.  
+ Furthermore,  we measure the time scale on which the potential decays.  
+ %% Here: 1. --> effect of changing parameters drvifall,  drviout: single result and averaged out one  (<50)
+The ability of a neuron to perform computations (decisions) comes from the fact 
+that it can interpret specific spikes from input neurons as either suggesting 
+a likely decision (excitatory,  making spike more likely) or  a less likely decision 
+(inhibitory making spike less likely).  We observe that changing the synapse type 
+leads to different post synaptic potentials
+%% Here: 2. --> compare excitatory and inhibitory synapse
+It already became apparent that noise plays an important role (in fact it is very 
+strong for a single potential).  Two types of noise need to be distinguished here: 
+The temporal noise (different executions of the same process) and the neuron-to 
+neuron noise (fixed pattern; due to production errors).
+
+
 \subsection{Short Term Plasticity}
+
+
+
 
 \subsection{Feed-Forward Networks}
 \label{sec:feed-forward}
