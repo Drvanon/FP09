@@ -196,7 +196,11 @@ a function of time and plot our results.
     \label{fig:membranes_ex1}
 \end{figure}
 
-The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery of the voltaage we observed strong fluctuations of the reset voltage.  We furthermore calculated the time between spikes and found a value of $t_{fir} = (16.10\pm 0.11)$ ms.
+The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The 
+reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery 
+of the voltaage we observed strong fluctuations of the reset voltage.  We 
+furthermore calculated the time between spikes and found a value of 
+$t_{fir} = (16.10\pm 0.11)$ ms.
 \subsection{Calibrating neuron parameters}
 %% Robin  %%
 
@@ -309,7 +313,8 @@ computations.  We now want to evaluate how a single neuron behaves under the inf
  spike train allows us to average out these fluctuations.  The spike triggered average 
  height of the post synaptic potentials is a good measure of the strength of the signal.  
  Furthermore,  we measure the time scale on which the potential decays.  
- %% Here: 1. --> effect of changing parameters drvifall,  drviout: single result and averaged out one  (<50)
+ %% Here: 1. --> effect of changing parameters drvifall,  drviout: single 
+ result and averaged out one  (<50)
 The ability of a neuron to perform computations (decisions) comes from the fact 
 that it can interpret specific spikes from input neurons as either suggesting 
 a likely decision (excitatory,  making spike more likely) or  a less likely decision 
@@ -332,7 +337,8 @@ Short-term plasticity (STP) is a key feature of neurons that allows learning.
 We implement short-term plasticity with a simplified Tsodyks-Markram model.  According 
 to this model,  neurotransmitters of a synapse are modeled as being in one of 
 three states: Recovered (\textbf{R}),  Effective (\textbf{E}),  Inactive 
-(\textbf{I}).  The behaviour of a synapse is determined by the parameters $\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according to 
+(\textbf{I}).  The behaviour of a synapse is determined by the parameters 
+$\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according to 
 \begin{align*}
 	R + E + I &= 1 \\
 	\frac{dE}{dt} &= - \frac{E}{\tau_\text{facil}} + \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
@@ -427,6 +433,21 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 \end{figure}
 
 \subsection{Recurrent Networks}
+We now construct a recurrent network with the connections sparse and random. 
+This adds some randomness to an otherwise regularly spiking neuron population. 
+Doing this produces a noise source that can be used for investigating other networks.
+To determine the qualification of this setup as a noise source we check for certain 
+properties.  Typically,  the utilized noise is obtained from a Poisson process 
+that can be characterised by its simple coefficient of variation
+\begin{equation}
+	CV = \frac{\sigma}{\mu} = 1
+\end{equation}
+with $\mu$ the mean and $\sigma$ the standard deviation. We first measure the 
+firing rate for each neuron and pliot it against the CVs of inter-spike intervals.  %% insert 1. 
+Then we perform a parameter sweep on the weight $w$ and the number of presynaptic 
+partners $K$.  %% insert 2.
+Finally we calibrate our network to a firing rate of approximately $25$Hz.  This 
+was achieved using the parameters %% insert 3.
 
 \subsection{A Simple Computation: XOR}
 A very common binary operation that is particularly non-linear (and therefore
@@ -502,7 +523,8 @@ relative simultaneity is required.
 Our results clearly show that the SPIKEY chip can be used for neuromorphic
 computing. Most importantly,  we could verify that the elementary building
 block (LIF-circuit) behaved in a very favourable way. Different characteristic
-features in different realizations of that circuit in the hardware (due to production errors) can be observed but we showed how to calibrate each circuit
+features in different realizations of that circuit in the hardware (due to 
+production errors) can be observed but we showed how to calibrate each circuit
 in a way that the effect of production errors is cancelled.  We clearly saw
 how this circuit allows short term plasticity,  a key trait of neurons that
 allow them to 'learn'.  Finally,  leaving the few-neuron regime,  we verified
