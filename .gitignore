@@ -1,4 +1,6 @@
-*.pdf
+main_report.pdf
+main_talk.pdf
+main.pdf
 *.bbl
 *.aux
 *.out
