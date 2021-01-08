@@ -120,7 +120,124 @@
 
 \begin{frame}
     %%%
-    \frametitle{Results - basic firing behaviour} 
+    \frametitle{Results - 1: basic firing behaviour} 
+    %%%    
+    \begin{figure}
+    		\centering
+    		\includegraphics[width=0.6\linewidth]{figures/fp_task1_1membrane.png}
+    \end{figure}
+    
+    \begin{itemize}
+    		\item no excitatory/inhibitory synapses,  just leakage potential,  
+    		\textbf{but: } $E_l>V_{th}\quad \Rightarrow$ Spikes
+    		\item Firing rate measured to $t_{fir} = (16.10\pm 0.11)$; dependent on 
+    		time constant, leakage potential,  leakage conductance
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    %%%
+    \frametitle{Results - 1: basic firing behaviour} 
+    %%%    
+\end{frame}
+
+\begin{frame}
+    %%%M
+    \frametitle{Results - 1: single neuron} 
+    %%%   
+    
+    
+\end{frame}
+
+\begin{frame}
+    %%%R
+    \frametitle{Results - 2: calibrating neuron parameters} 
+    %%%    
+\end{frame}
+
+\begin{frame}
+    %%%M
+    \frametitle{Results - 3: single neuron with synaptic input} 
+    %%%    
+    \begin{itemize}
+    		\item we need to evaluate how a neuron responds to synaptic input
+    		\item stimulate a neuron with a synapse,  then \textbf{record its membrane 
+    		potential} (EPSP).
+    		\item Two parameters:
+    		\begin{enumerate}
+    			\item drvifall: scale magnitude of signal
+    			\item drviout: scale decay properties 
+		\end{enumerate}  
+		\item shape of EPSP depends on \textbf{synapse type}:
+		\begin{enumerate}
+			\item excitatory synapses: positive spikes
+			\item inhibitory synapses: negative spikes
+		\end{enumerate}		  		    
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    %%%M
+    \frametitle{Results - 4: short term plasticity} 
+    \begin{itemize}
+    		\item \textbf{Plasticity} refers to the ability of a neuron to dynamically 
+    		change the synapse weights.
+    		\item two types:
+    		\begin{enumerate}
+    			\item short-term plasticity
+    			\item spike timing dependent plasticity
+    		\end{enumerate}
+    		\item Spikey implements simplified \textbf{Tsodyks Markram Model}.  
+    		Neurotransmitters of synapse are in one of three states $(R,E,I)$ with
+    		\begin{align}
+			1 &= R + E + I  \\
+			\frac{dE}{dt} &= - \frac{E}{\tau_\text{facil}} + \sum_\text{spike} 
+			UR\delta(t-t_\text{spike} ) \\
+			\frac{dR}{dt} &= - \frac{I}{\tau_\text{rec}} - \sum_\text{spike} 
+			UR\delta(t-t_\text{spike} ) 
+\end{align}
+    \end{itemize}
+    %%%    
+\end{frame}
+
+\begin{frame}
+    %%%R
+    \frametitle{Results - 5: feed-forward networks} 
+    %%%    
+\end{frame}
+
+\begin{frame}
+    %%%M
+    \frametitle{Results - 6: recurrent networks} 
+    %%%  
+    \begin{columns}
+          \column{0.5\linewidth}
+          	\begin{figure}
+    				\centering
+    				\includegraphics[width=\linewidth]{figures/activity_sweep.png}
+    				%\caption{source: FP09 neuromorphic computing script,  2020}
+ 		   \end{figure}
+ 		   \begin{itemize}
+          		\item Spikey as a collection of LiF circuits interconnected with synapses
+          	\end{itemize}
+          
+          \column{0.5\linewidth}
+          \begin{figure}
+    				\centering
+    				\includegraphics[width=\linewidth]{figures/CV_sweep.png}
+    				%\caption{source: FP09 neuromorphic computing script,  2020}
+ 		   \end{figure}
+ 		   \begin{itemize}
+          		\item Schematic of the basic operation process
+          	\end{itemize}
+          	
+	\end{columns}
+    
+\end{frame}
+
+\begin{frame}
+    %%%R
+    \frametitle{Results - 7: simple computation XOR} 
     %%%    
 \end{frame}
 
