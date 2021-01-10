@@ -252,6 +252,103 @@
 \end{frame}
 
 \begin{frame}
+	\frametitle{Dependence of the EPSP on the parameters}
+	\begin{columns}
+          \column{0.4\linewidth}
+          	\begin{figure}
+    				\centering
+    				\includegraphics[width=\linewidth]{figures/epsp_fall_+.pdf}
+ 		   \end{figure}
+
+          \column{0.4\linewidth}
+          \begin{figure}
+    				\centering
+    				\includegraphics[width=\linewidth]{figures/epsp_fall_-.pdf}
+    				%\caption{source: FP09 neuromorphic computing script,  2020}
+ 		   \end{figure}
+	\end{columns}
+	
+	\begin{columns}
+          \column{0.4\linewidth}
+          	\begin{figure}
+    				\centering
+    				\includegraphics[width=\linewidth]{figures/epsp_out_+.pdf}
+ 		   \end{figure}
+
+
+          \column{0.4\linewidth}
+          \begin{figure}
+    				\centering
+    				\includegraphics[width=\linewidth]{figures/epsp_out_-.pdf}
+    				%\caption{source: FP09 neuromorphic computing script,  2020}
+ 		   \end{figure}
+          	
+          	%% difference: minexc weight mininhweight
+
+	\end{columns}
+	
+\end{frame}
+
+\begin{frame}
+
+	\frametitle{Difference between excitatory and inhibitory synapses for same parameter}
+	 \begin{columns}
+          \column{0.5\linewidth}
+          	\begin{figure}
+    				\centering
+    				\includegraphics[width=\linewidth]{figures/epsp_inh_fall_03_out_05.pdf}
+ 		   \end{figure}
+ 		   \begin{itemize}
+          		\item Inhibitory Synapse
+          	\end{itemize}
+
+          \column{0.5\linewidth}
+          \begin{figure}
+    				\centering
+    				\includegraphics[width=\linewidth]{figures/epsp_exc_fall_03_out_05.pdf}
+    				%\caption{source: FP09 neuromorphic computing script,  2020}
+ 		   \end{figure}
+ 		   \begin{itemize}
+          		\item Excitatory Synapse
+          	\end{itemize}
+          	
+          	%% difference: minexc weight mininhweight
+
+	\end{columns}
+	
+	\begin{itemize}
+		\item Observe different magnitude despite similar parameters: minExcWeight 
+		$\neq$ minInhWeight
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	%%%M
+	\frametitle{Results - 3: noise across different neurons}
+	
+	\begin{figure}
+		\includegraphics[width=0.7\textwidth]{figures/histo_maxVolt.pdf}
+	\end{figure}
+	
+	\begin{itemize}
+		\item Measured height of EPSP for different triggering excitatory snapses. 
+		 \item \textbf{Significant variance} between different stimulating neurons. 
+		  mean: $3.06$ mV,  but asymmetric distribution $\Rightarrow$ median: $2.64$ mV.
+		 standard deviation: $1.17$ mV
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results - 3: Stacked EPSPs}
+	\begin{figure}
+		\includegraphics[width=0.8\textwidth]{figures/stacked_epsp.pdf}
+	\end{figure}
+	\begin{itemize}
+		\item Stacked EPSPs lead to firing when they are spaced less than $40$ms apart.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
     %%%M
     \frametitle{Results - 4: short term plasticity}
     \begin{itemize}
@@ -311,9 +408,25 @@
 \end{frame}
 
 \begin{frame}
+	%%% include other plots as well?
+	\frametitle{Results - 6: recurrent networks}
+	\centering
+	\includegraphics[width=0.7\textwidth]{figures/rate_CV.png}
+
+
+	\begin{itemize}
+		\item Create recurrent network with sparse connections, synapses inhibitory
+		\item Set $E_{leak} > E_{thresh}$ to introduce regular spiking; interrupted 
+		by inhibitory synapses $\Rightarrow$ Randomness
+		\item CV antiproportional to firing rate: lower firing rate $Rightarrow$ was 
+		interrupted more,  more variation
+	\end{itemize}
+	
+\end{frame}
+\begin{frame}
     %%%M
-    \frametitle{Results - 6: recurrent networks}
-    %%%
+    \frametitle{Results - 6: recurrent networks: Parameter sweep}
+    %%% include other plots as well?
     \begin{columns}
           \column{0.5\linewidth}
           	\begin{figure}
@@ -337,6 +450,18 @@
 
 	\end{columns}
 
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results - 6: Calibrating the Network}
+	\begin{itemize}
+		\item We previously showed that activity heavily depends on connection weight 
+		and connection number
+		\item We use this knowledge now to bring the network to a constant average 
+		firing rate
+		\item We calibrate a firing rate of $25Hz$ by setting $w=2.0$ and the number 
+		of inhibitory synapses to $14$.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
