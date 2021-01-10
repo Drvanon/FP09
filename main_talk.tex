@@ -1,9 +1,11 @@
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
+%\usetheme{Boadilla}
 
 %Information to be included in the title page:
-\title{Seminar Talk \\ F09: Neuromorphic Computing}
-\author{Students: Robin Dorstijn \& Moritz Epping \\ Supervisor: Jakob Kaiser}
+\title{Seminar Talk \\ F10: Neuromorphic Computing\\ 
+- Review of the Spikey Hardware - }
+\author{Robin Dorstijn \& Moritz Epping \\ Supervisor: Jakob Kaiser}
 \institute{Universität Heidelberg}
 \date{January 2021}
 
@@ -12,6 +14,9 @@
 \usepackage{pdfpages}
 \usepackage{transparent}
 \usepackage{titlesec}
+\usepackage{circuitikz}
+\usepackage{physics}
+
 
 
 \newcommand{\incfig}[1]{
@@ -20,24 +25,46 @@
 }
 
 \begin{document}
-
+\expandafter\def\expandafter\insertshorttitle\expandafter{%
+  \insertshorttitle\hfill%
+  \insertframenumber\,/\,\inserttotalframenumber}
+  
+  
 \frame{\titlepage}
 
 \begin{frame}
     %%%
     \frametitle{Summary}
     \begin{enumerate}
-        \item Theoretical Overview
-        \item Results
-        \item Discussion
+        \item Fundamentals
+        \begin{itemize}
+        		\item Definition / Motivation
+        		\item Neurons
+        		\item LiF Circuit
+        		\item Hardware Realisation
+        \end{itemize}
+        \item Experiments
+        \begin{itemize}
+        		\item Fundamental Circuit Behaviour
+        		\begin{itemize}
+        			\item Firing Behaviour,  Calibration,  Synapse Types,  Plasticity 
+        		\end{itemize}
+        		\item Networks
+        		\begin{itemize}
+        			\item Feed-Forward,  Recurrent,  XOR-Gate
+        		\end{itemize}
+        \end{itemize}
+        \item Discussion / Scope of Usability
     \end{enumerate}
     %%%
 \end{frame}
 
 \begin{frame}
     %%%
-    \frametitle{Motivation}
+    \frametitle{Definition: Motivation}
    	\begin{itemize}
+   		\item \textbf{Neuromorphic Computing:} Use of VLSI systems containing 
+   		electronical analog circuits to mimic architectures from nervous system.
    		\item Goals of Neuromorphic Computing:
    		\begin{enumerate}
    			\item Building more efficient computers (Von-Neumann Bottleneck vs.  Evolution)
@@ -46,8 +73,8 @@
    		\bigskip
    		\item Proposed Architecture: SPIKEY (Heidelberg)
    		\begin{enumerate}
-   			\item What are basic properties neuromorphic computing devices must fulfill?
-   			\item Does SPIKEY fulfill these properties?
+   			\item What are basic properties for neuromorphic computing devices?
+   			\item Does SPIKEY fulfill these?
    			\item How well can we use it for more complicated purposes?
    		\end{enumerate}
    	\end{itemize}
@@ -129,6 +156,42 @@
 	\end{columns}
 \end{frame}
 
+\begin{frame}
+    %%%
+    \frametitle{Results - 1: basic firing behaviour}
+    %%%    
+\begin{figure}[ht]
+    \centering
+    \begin{circuitikz}[scale = .6, transform shape]
+        \draw (4, 0)    to node[midway, above]{$V_m$} (8.5, 0) node[op amp, anchor=+](A1){}; % main line
+        \draw (A1.out)  to[short, l=$V_\text{out}$, -o] ++(1, 0);
+        \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
+    
+        \draw (4, 0)    to[vR, l=$g_l$, *-] (4, -2)
+                        to[battery1, l=$E_l$] (4, -3) node[ground] {} (4, -4);
+        \draw (6, 0)    to[C, l=$C_m$] (6, -2)
+                        node[ground] {} (6, -2);
+        \draw (7.5, -2) node[anchor=north] {$V_\text{reset}$}
+                        to[short, o-] (7.5, -1)
+                        to[normal open switch, -*] (7.5, 0);
+        \draw [densely dashed]
+              (3.3, -4) --++(0, 4.6)
+                        --++(5, 0)
+                        --++(0, -4.6)
+                        --++(-5, 0);
+    \end{circuitikz}
+\end{figure}
+
+    \begin{itemize}
+    		\item No input from other neurons; just leakage potential
+    		\item $E_l>V_{th}\quad \Rightarrow$ regular spiking
+    		\item Parameters that influence the spiking rate: $E_l,  g_l,  C_m,  
+    		t_\text{refrac},  \abs{V_\text{thres} - V_\text{rest}}$.  Recall:
+    		\[ \frac{dV(t)}{dt} = \frac{I(t)}{C_m} = \frac{g_l(t)E_l}{C_m} \]
+    \end{itemize}
+
+\end{frame}
+
 
 \begin{frame}
     %%%
@@ -142,23 +205,8 @@
     \begin{itemize}
     		\item no excitatory/inhibitory synapses,  just leakage potential,
     		\textbf{but: } $E_l>V_{th}\quad \Rightarrow$ Spikes
-    		\item Firing rate measured to $t_{fir} = (16.10\pm 0.11)$; dependent on
-    		time constant, leakage potential,  leakage conductance
+    		\item Firing rate measured to $t_{fir} = (16.10\pm 0.11)$
     \end{itemize}
-\end{frame}
-
-\begin{frame}
-    %%%
-    \frametitle{Results - 1: basic firing behaviour}
-    %%%
-\end{frame}
-
-\begin{frame}
-    %%%M
-    \frametitle{Results - 1: single neuron}
-    %%%
-
-
 \end{frame}
 
 \begin{frame}
@@ -370,6 +418,22 @@
 \end{align}
     \end{itemize}
     %%%
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results - 4: Depressing mode}
+	\centering
+	\includegraphics[width=\textwidth]{figures/stp_depressing.png}
+\end{frame}
+\begin{frame}
+	\frametitle{Results - 4: STP disabled}
+	\centering
+	\includegraphics[width=\textwidth]{figures/stp_off.png}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Results - 4: Facilitating mode}
+	
 \end{frame}
 
 \begin{frame}
