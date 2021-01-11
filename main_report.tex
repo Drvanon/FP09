@@ -143,6 +143,26 @@ just fired.
     \label{fig:circuit}
 \end{figure}
 
+
+\begin{figure}[ht]
+    \centering
+    \begin{circuitikz}[scale = .6, transform shape]
+        \draw (4, 0)    to node[midway, above]{$V_m$} (8.5, 0) node[op amp, anchor=+](A1){}; % main line
+        \draw (A1.out)  to[short, l=$V_\text{out}$, -o] ++(1, 0);
+        \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
+        \draw (4, 0)    to[vR, l=$g_i$, *-] (4, -2)
+                        to[battery1, l=$E_g$] (4, -3) node[ground] {} (4, -4);
+        \draw (6, 0)    to[C, l=$C_m$] (6, -2)
+                        node[ground] {} (6, -2);
+        \draw (8, -3)   to[short, l_=$V_\text{reset}$, o-] (8, -1)
+                        to[short, o-] (7.5, -1)
+                        to[normal open switch, -*] (7.5, 0);
+    \end{circuitikz}
+    \caption{Circuit of a single neuron in a LIF chip.}
+    \label{fig:circuit}
+\end{figure}
+
+
 \section{Execution \& Results}
 A rather interesting setup was provided by the university of Heidelberg. It
 hosted a SPIKEY chip on its grounds, which was physically inaccessible due to
