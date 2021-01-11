@@ -3,7 +3,7 @@
 %\usetheme{Boadilla}
 
 %Information to be included in the title page:
-\title{Seminar Talk \\ F10: Neuromorphic Computing\\ 
+\title{Seminar Talk \\ F10: Neuromorphic Computing\\
 - Review of the Spikey Hardware - }
 \author{Robin Dorstijn \& Moritz Epping \\ Supervisor: Jakob Kaiser}
 \institute{Universität Heidelberg}
@@ -28,8 +28,8 @@
 \expandafter\def\expandafter\insertshorttitle\expandafter{%
   \insertshorttitle\hfill%
   \insertframenumber\,/\,\inserttotalframenumber}
-  
-  
+
+
 \frame{\titlepage}
 
 \begin{frame}
@@ -47,7 +47,7 @@
         \begin{itemize}
         		\item Fundamental Circuit Behaviour
         		\begin{itemize}
-        			\item Firing Behaviour,  Calibration,  Synapse Types,  Plasticity 
+        			\item Firing Behaviour,  Calibration,  Synapse Types,  Plasticity
         		\end{itemize}
         		\item Networks
         		\begin{itemize}
@@ -63,7 +63,7 @@
     %%%
     \frametitle{Definition: Motivation}
    	\begin{itemize}
-   		\item \textbf{Neuromorphic Computing:} Use of VLSI systems containing 
+   		\item \textbf{Neuromorphic Computing:} Use of VLSI systems containing
    		electronical analog circuits to mimic architectures from nervous system.
    		\item Goals of Neuromorphic Computing:
    		\begin{enumerate}
@@ -159,14 +159,14 @@
 \begin{frame}
     %%%
     \frametitle{Results - 1: basic firing behaviour}
-    %%%    
+    %%%
 \begin{figure}[ht]
     \centering
     \begin{circuitikz}[scale = .6, transform shape]
         \draw (4, 0)    to node[midway, above]{$V_m$} (8.5, 0) node[op amp, anchor=+](A1){}; % main line
         \draw (A1.out)  to[short, l=$V_\text{out}$, -o] ++(1, 0);
         \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
-    
+
         \draw (4, 0)    to[vR, l=$g_l$, *-] (4, -2)
                         to[battery1, l=$E_l$] (4, -3) node[ground] {} (4, -4);
         \draw (6, 0)    to[C, l=$C_m$] (6, -2)
@@ -185,7 +185,7 @@
     \begin{itemize}
     		\item No input from other neurons; just leakage potential
     		\item $E_l>V_{th}\quad \Rightarrow$ regular spiking
-    		\item Parameters that influence the spiking rate: $E_l,  g_l,  C_m,  
+    		\item Parameters that influence the spiking rate: $E_l,  g_l,  C_m,
     		t_\text{refrac},  \abs{V_\text{thres} - V_\text{rest}}$.  Recall:
     		\[ \frac{dV(t)}{dt} = \frac{I(t)}{C_m} = \frac{g_l(t)E_l}{C_m} \]
     \end{itemize}
@@ -315,7 +315,7 @@
     				%\caption{source: FP09 neuromorphic computing script,  2020}
  		   \end{figure}
 	\end{columns}
-	
+
 	\begin{columns}
           \column{0.4\linewidth}
           	\begin{figure}
@@ -330,11 +330,11 @@
     				\includegraphics[width=\linewidth]{figures/epsp_out_-.pdf}
     				%\caption{source: FP09 neuromorphic computing script,  2020}
  		   \end{figure}
-          	
+
           	%% difference: minexc weight mininhweight
 
 	\end{columns}
-	
+
 \end{frame}
 
 \begin{frame}
@@ -359,13 +359,13 @@
  		   \begin{itemize}
           		\item Excitatory Synapse
           	\end{itemize}
-          	
+
           	%% difference: minexc weight mininhweight
 
 	\end{columns}
-	
+
 	\begin{itemize}
-		\item Observe different magnitude despite similar parameters: minExcWeight 
+		\item Observe different magnitude despite similar parameters: minExcWeight
 		$\neq$ minInhWeight
 	\end{itemize}
 \end{frame}
@@ -373,14 +373,14 @@
 \begin{frame}
 	%%%M
 	\frametitle{Results - 3: noise across different neurons}
-	
+
 	\begin{figure}
 		\includegraphics[width=0.7\textwidth]{figures/histo_maxVolt.pdf}
 	\end{figure}
-	
+
 	\begin{itemize}
-		\item Measured height of EPSP for different triggering excitatory snapses. 
-		 \item \textbf{Significant variance} between different stimulating neurons. 
+		\item Measured height of EPSP for different triggering excitatory snapses.
+		 \item \textbf{Significant variance} between different stimulating neurons.
 		  mean: $3.06$ mV,  but asymmetric distribution $\Rightarrow$ median: $2.64$ mV.
 		 standard deviation: $1.17$ mV
 	\end{itemize}
@@ -433,7 +433,16 @@
 
 \begin{frame}
 	\frametitle{Results - 4: Facilitating mode}
-	
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results - 5: feed-forward networks}
+    \begin{itemize}
+        \item Population size
+        \item Superposition of feed forward chains as model of networks
+        \item Inhibitory neurons in chains
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -443,32 +452,40 @@
 
 \begin{frame}
     \frametitle{Results - 5: feed-forward networks}
-    \includegraphics[width=\textwidth]{figures/ex0 -> ex.png}
+    \includegraphics[width=\textwidth]{figures/ex0_ex.png}
 \end{frame}
 
 \begin{frame}
     \frametitle{Results - 5: feed-forward networks}
-    \includegraphics[width=\textwidth]{figures/ex0 -> inh.png}
+    \includegraphics[width=\textwidth]{figures/ex0_inh.png}
 \end{frame}
 
 \begin{frame}
     \frametitle{Results - 5: feed-forward networks}
-    \includegraphics[width=\textwidth]{figures/ex -> ex.png}
+    \includegraphics[width=\textwidth]{figures/ex_ex.png}
 \end{frame}
 
 \begin{frame}
     \frametitle{Results - 5: feed-forward networks}
-    \includegraphics[width=\textwidth]{figures/ex -> inh.png}
+    \includegraphics[width=\textwidth]{figures/ex_inh.png}
 \end{frame}
 
 \begin{frame}
     \frametitle{Results - 5: feed-forward networks}
-    \includegraphics[width=\textwidth]{figures/inh -> ex.png}
+    \includegraphics[width=\textwidth]{figures/inh_ex.png}
 \end{frame}
 
 \begin{frame}
     \frametitle{Results - 5: feed-forward networks}
     \includegraphics[width=\textwidth]{figures/feedforward signals loop.png}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results - 5: feed-forward networks (discussion)}
+    \begin{itemize}
+        \item No calibration
+        \item Depressing mode?
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -480,12 +497,12 @@
 
 	\begin{itemize}
 		\item Create recurrent network with sparse connections, synapses inhibitory
-		\item Set $E_{leak} > E_{thresh}$ to introduce regular spiking; interrupted 
+		\item Set $E_{leak} > E_{thresh}$ to introduce regular spiking; interrupted
 		by inhibitory synapses $\Rightarrow$ Randomness
-		\item CV antiproportional to firing rate: lower firing rate $Rightarrow$ was 
+		\item CV antiproportional to firing rate: lower firing rate $Rightarrow$ was
 		interrupted more,  more variation
 	\end{itemize}
-	
+
 \end{frame}
 \begin{frame}
     %%%M
@@ -519,11 +536,11 @@
 \begin{frame}
 	\frametitle{Results - 6: Calibrating the Network}
 	\begin{itemize}
-		\item We previously showed that activity heavily depends on connection weight 
+		\item We previously showed that activity heavily depends on connection weight
 		and connection number
-		\item We use this knowledge now to bring the network to a constant average 
+		\item We use this knowledge now to bring the network to a constant average
 		firing rate
-		\item We calibrate a firing rate of $25Hz$ by setting $w=2.0$ and the number 
+		\item We calibrate a firing rate of $25Hz$ by setting $w=2.0$ and the number
 		of inhibitory synapses to $14$.
 	\end{itemize}
 \end{frame}
@@ -541,6 +558,14 @@
 \begin{frame}
     \frametitle{Results - 7: simple computation XOR}
     \includegraphics[width=\textwidth]{figures/XOR-output.png}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results - 7: simple computation XOR (discussion)}
+    \begin{itemize}
+        \item No calibration performed other than skipping 'bad' neurons
+        \item Depressing mode
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
