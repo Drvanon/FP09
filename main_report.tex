@@ -216,10 +216,10 @@ a function of time and plot our results.
     \label{fig:membranes_ex1}
 \end{figure}
 
-The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The 
-reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery 
-of the voltaage we observed strong fluctuations of the reset voltage.  We 
-furthermore calculated the time between spikes and found a value of 
+The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The
+reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery
+of the voltaage we observed strong fluctuations of the reset voltage.  We
+furthermore calculated the time between spikes and found a value of
 $t_{fir} = (16.10\pm 0.11)$ ms.
 \subsection{Calibrating neuron parameters}
 %% Robin  %%
@@ -279,11 +279,11 @@ parameters:
     \item $g_\text{leak}$:  \SI{20.0}{\nano\siemens}
 \end{itemize}
 
-This however resulted in wildly differing frequencies, as becomes visible in
-figure \ref{fig:4membranes}. In order to compensate for this $g_l$ was adjusted
-individually for all of the membranes so that they were all correct within their
-respective standard deviation: \SI{20.1}{\milli\volt}, \SI{55.0}{\milli\volt},
-\SI{60.0}{\milli\volt}, \SI{20.5}{\milli\volt}.
+This however resulted in wildly differing frequencies. In order to compensate
+for this $g_l$ was adjusted individually for all of the membranes so that they
+were all correct within their respective standard deviation:
+\SI{20.1}{\milli\volt}, \SI{55.0}{\milli\volt}, \SI{60.0}{\milli\volt},
+\SI{20.5}{\milli\volt}.
 
 \begin{figure}[ht]
     \centering
@@ -325,22 +325,22 @@ Sadly we were unable to implement the algorithm, but we encourage the reader
 to.
 
 \subsection{A Single Neuron with Synaptic Input}
-Interconnectivity between neurons is crucial since this is the basis of 
+Interconnectivity between neurons is crucial since this is the basis of
 computations.  We now want to evaluate how a single neuron behaves under the influence
- of a synaptic input.  To do that,  we stimulate one hardware neuron with a synapse 
- and record its membrane potential.  The readout signal is subject to significant 
- noise which is due to the read-out process.  Stimulating the neuron with a regular 
- spike train allows us to average out these fluctuations.  The spike triggered average 
- height of the post synaptic potentials is a good measure of the strength of the signal.  
- Furthermore,  we measure the time scale on which the potential decays.  
+ of a synaptic input.  To do that,  we stimulate one hardware neuron with a synapse
+ and record its membrane potential.  The readout signal is subject to significant
+ noise which is due to the read-out process.  Stimulating the neuron with a regular
+ spike train allows us to average out these fluctuations.  The spike triggered average
+ height of the post synaptic potentials is a good measure of the strength of the signal.
+ Furthermore,  we measure the time scale on which the potential decays.
 The parameters can be chosen from these ranges:
 \begin{align*}
 	\text{drviout} &\in \left[ 0.013, 1.667  \right] \\
-	\text{drvifall} &\in \left[ 0.02,  2.5  \right] 
+	\text{drvifall} &\in \left[ 0.02,  2.5  \right]
 \end{align*}
-We pick as default values approximately the mean of these intervals and 
-investigate for each parameter both extremes.  Default: $\text{drviout} := 0.80$ 
-and $\text{drvifall}=1.3$.  
+We pick as default values approximately the mean of these intervals and
+investigate for each parameter both extremes.  Default: $\text{drviout} := 0.80$
+and $\text{drvifall}=1.3$.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/epsp_default.pdf}
@@ -371,12 +371,12 @@ and $\text{drvifall}=1.3$.
     \caption{EPSP for high drvifall.}
     \label{fig:epsp_fall+}
 \end{figure}
-We conclude that reducing drvifall leads to higher spikes while reducing drviout 
+We conclude that reducing drvifall leads to higher spikes while reducing drviout
 leads to more slowly decaying (and lower) spikes.
-The ability of a neuron to perform computations (decisions) comes from the fact 
-that it can interpret specific spikes from input neurons as either suggesting 
-a likely decision (excitatory,  making spike more likely) or  a less likely decision 
-(inhibitory making spike less likely).  We observe that changing the synapse type 
+The ability of a neuron to perform computations (decisions) comes from the fact
+that it can interpret specific spikes from input neurons as either suggesting
+a likely decision (excitatory,  making spike more likely) or  a less likely decision
+(inhibitory making spike less likely).  We observe that changing the synapse type
 leads to different post synaptic potentials
 \begin{figure}[ht]
     \centering
@@ -390,37 +390,37 @@ leads to different post synaptic potentials
     \caption{EPSP for excitatory neuron}
     \label{fig:epsp_exc_fall}
 \end{figure}
-Note that for the same parameters,  the EPSP of the inhibitory neuron is much 
+Note that for the same parameters,  the EPSP of the inhibitory neuron is much
 smaller in magnitude than the one of the excitatory neuron.
-It already became apparent that noise plays an important role (in fact it is very 
-strong for a single potential).  Two types of noise need to be distinguished here: 
-The temporal noise (different executions of the same process) and the neuron-to 
+It already became apparent that noise plays an important role (in fact it is very
+strong for a single potential).  Two types of noise need to be distinguished here:
+The temporal noise (different executions of the same process) and the neuron-to
 neuron noise (fixed pattern; due to production errors).
 %% Here 3 --> fire
-By changing the stimulus type we can obtain stacked EPSPs on the membrane.  By 
-reducing the temporal distance between them we can make the neuron fire, provided 
-the threshold is not set to a large value.  We furthermore compare the relative 
+By changing the stimulus type we can obtain stacked EPSPs on the membrane.  By
+reducing the temporal distance between them we can make the neuron fire, provided
+the threshold is not set to a large value.  We furthermore compare the relative
 heights of the PSPs with the previous fixed-pattern noise results.
 
 \subsection{Short Term Plasticity}
-Short-term plasticity (STP) is a key feature of neurons that allows learning. 
-\textit{Plasticity} refers to the ability of changing synapse weights dynamically.  
-We implement short-term plasticity with a simplified Tsodyks-Markram model.  According 
-to this model,  neurotransmitters of a synapse are modeled as being in one of 
-three states: Recovered (\textbf{R}),  Effective (\textbf{E}),  Inactive 
-(\textbf{I}).  The behaviour of a synapse is determined by the parameters 
-$\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according to 
+Short-term plasticity (STP) is a key feature of neurons that allows learning.
+\textit{Plasticity} refers to the ability of changing synapse weights dynamically.
+We implement short-term plasticity with a simplified Tsodyks-Markram model.  According
+to this model,  neurotransmitters of a synapse are modeled as being in one of
+three states: Recovered (\textbf{R}),  Effective (\textbf{E}),  Inactive
+(\textbf{I}).  The behaviour of a synapse is determined by the parameters
+$\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according to
 \begin{align*}
 	R + E + I &= 1 \\
 	\frac{dE}{dt} &= - \frac{E}{\tau_\text{facil}} + \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
 	\frac{dR}{dt} &= - \frac{I}{\tau_\text{rec}} - \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
 \end{align*}
-We first test the behaviour of the spike chip with the depressing mode.  (vary 
+We first test the behaviour of the spike chip with the depressing mode.  (vary
 dist. init. spikes,  vary dist. to final spike,  change U?).   %%% insert 1.
-We then disable STP and verify that the local firing history of the synapse 
-indeed does not have an effect on the membrane potential as a response to the spike 
-anymore.  %%% insert 2 
-Finally,  we investigate a facilitating synapse and again do... (vary  dist. init. 
+We then disable STP and verify that the local firing history of the synapse
+indeed does not have an effect on the membrane potential as a response to the spike
+anymore.  %%% insert 2
+Finally,  we investigate a facilitating synapse and again do... (vary  dist. init.
 spikes,  vary dist. to final spike,  change U?). %%insert 3.
 
 
@@ -504,17 +504,17 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 \end{figure}
 
 \subsection{Recurrent Networks}
-We now construct a recurrent network with the connections sparse and random. 
-This adds some randomness to an otherwise regularly spiking neuron population. 
+We now construct a recurrent network with the connections sparse and random.
+This adds some randomness to an otherwise regularly spiking neuron population.
 Doing this produces a noise source that can be used for investigating other networks.
-To determine the qualification of this setup as a noise source we check for certain 
-properties.  Typically,  the utilized noise is obtained from a Poisson process 
+To determine the qualification of this setup as a noise source we check for certain
+properties.  Typically,  the utilized noise is obtained from a Poisson process
 that can be characterised by its simple coefficient of variation
 \begin{equation}
 	CV = \frac{\sigma}{\mu} = 1
 \end{equation}
-with $\mu$ the mean and $\sigma$ the standard deviation. We first measure the 
-firing rate for each neuron and pliot it against the CVs of inter-spike intervals. 
+with $\mu$ the mean and $\sigma$ the standard deviation. We first measure the
+firing rate for each neuron and pliot it against the CVs of inter-spike intervals.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/CV_sweep.png}
@@ -527,10 +527,10 @@ firing rate for each neuron and pliot it against the CVs of inter-spike interval
     \caption{Parameter sweep of $w$ and $K$ to determine their effect on the activity of the neurons}
     \label{fig:activity_sweep}
 \end{figure}
- %% insert 1. 
-Then we perform a parameter sweep on the weight $w$ and the number of presynaptic 
+ %% insert 1.
+Then we perform a parameter sweep on the weight $w$ and the number of presynaptic
 partners $K$.  %% insert 2.
-Finally we calibrate our network to a firing rate of approximately $25$Hz.  This 
+Finally we calibrate our network to a firing rate of approximately $25$Hz.  This
 was achieved using the parameters %% insert 3.
 
 \subsection{A Simple Computation: XOR}
@@ -550,47 +550,29 @@ more complex) is the XOR operation. It can be described with the truth table
     \cite{horowitz_hill_2020}}
     \label{tab:XOR}
 \end{table}
-A simple solution for this problem is presented in figure
-\ref{fig:XOR-suggested}, however this was not used, as the institute provided a
-different network architecture that has significant benefits over the suggested
-one: it is much more robust to what is called referred to with `width' in
-section \ref{sec:feed-forward}. The inhibitory neurons that are operating in a
-recurrent fashion prevent leaking voltage from causing the any excitatory neuron
-in the network to fire out of line. This is especially important in an XOR gate,
-as the chance that noise would `cancel out' is negligible.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=.5\textwidth]{figures/XOR-suggestion.png}
-    \caption{Suggestion for a network that behaves like an XOR gate. Note that
-        the inhibitory weight has to be strong, so that it can inhibit the output
-        from signalling, even when it receives an input from both sides.}
-    \label{fig:XOR-suggested}
-\end{figure}
+A trivial solution for this problem was found and dismissed thanks to its
+probable fragility.  Instead the institute provided a different network
+architecture that has significant benefits over the suggested one: it is much
+more robust to what is called referred to with `width' in section
+\ref{sec:feed-forward}. The inhibitory neurons that are operating in a recurrent
+fashion prevent leaking voltage from causing the any excitatory neuron in the
+network to fire out of line. This is especially important in an XOR gate, as the
+chance that noise would `cancel out' is negligible.
 
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth]{figures/XOR-used.png}
     \caption{Network that was used to test the ability of neurons to perform
-        logical operations. Functions as an XOR gate, similarly to the network
-        presented in figure \ref{fig:XOR-suggested}.}
+        logical operations. Functions as an XOR gate.}
     \label{fig:XOR-used}
 \end{figure}
 
 A challenge that comes with a network like this is to find the correct set of
 weights in order for the network to operate as expected. This was achieved by
-plotting all signals sent in the same graph, like was done in figure
-\ref{fig:XOR-output}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=.5\textwidth]{figures/XOR-output.png}
-    \caption{Diagnostic output of an XOR network with an architecture as
-        represented in figure \ref{fig:XOR-suggested}. Here the input is
-        `jittered': shifted in time slightly in order to inspect the robustness
-        of the network. Clearly it is not doing so well.}
-    \label{fig:XOR-output}
-\end{figure}
+plotting all signals sent in the same graph. This allowed for a speedy diagnosis
+of the network by showing what expected signals were missing. An additional
+script was present that would match the fired signals to expected time stamps,
+giving a quantitative description of the quality of the network.
 
 It quickly became clear that though a temporarily optimal configuration had been
 found, it was not to last long, as a mere half hour later the accuracy had
@@ -604,28 +586,49 @@ This could be useful in applications where signals are not perfectly timed, but
 relative simultaneity is required.
 
 \section{Conclusions}
-Our results clearly show that the SPIKEY chip can be used for neuromorphic
-computing. Most importantly,  we could verify that the elementary building
-block (LIF-circuit) behaved in a very favourable way. Different characteristic
-features in different realizations of that circuit in the hardware (due to 
-production errors) can be observed but we showed how to calibrate each circuit
-in a way that the effect of production errors is cancelled.  We clearly saw
-how this circuit allows short term plasticity,  a key trait of neurons that
-allow them to 'learn'.  Finally,  leaving the few-neuron regime,  we verified
-that the hardware can actually be used to model circuits with $\approx 200$
-neurons.  In the final exercise we even showed how we can perform logical
-operations with these large arrays of neurons.\par
-Comparing our quite complicated realization of the XOR-gate to the standard
-(much more simple) circuit in digital computing leads us to one final important
-insight: When switching computer hardware to neuromorphic hardware, it does
-not suffice to merely copy the architecture from standard computers and
-furthermore translate each gate.  This leads to messy circuits and an enormous
-amount of neurons required.  Instead,  it is key to also adapt the way of
-computation to the biological blueprint of our basic computation components.
-This leads to radically new ways of computer design...... [rework!!!]
+Our results clearly show that the SPIKEY chip can be used for experimenting with
+neuromorphic computing in the physical world. Most importantly, it could
+verified that the elementary building block (LIF-circuit) behaved in a very
+favourable way. Different characteristic features in different realizations of
+that circuit in the hardware (due to production errors) can be observed but it
+was shown to be possible to calibrate each  ``neuron'' in a way that the effect
+of production errors is mostly cancelled. The circuit allows short term
+plasticity,  a key trait of neurons that allows them to `learn'.  Finally,
+leaving the few-neuron regime, it was verified that the hardware can be used to
+model circuits with $\approx 200$ neurons, even binary logic was achievable with
+the hardware.
 
-% In the reworking the temporal instability of the network should be mentioned
-% in order to match with the abstract.
+However thanks to the temporal instability of the chip it is clearly not
+production ready. It is hard to think of a critical application that would have
+environmental conditions suited for this chip, that would be simultaneously cost
+effective. Calibration would likely be sufficiently time consuming that it would
+ruin any cost effectiveness. That is not to say that it is without application
+in the world of research, where it can be a useful tool to investigate behaviour
+of neural structures by making it behave like physical neurons.
+
+\section{Discussion}
+Comparing our quite complicated realization of the XOR-gate to the standard
+electrical implementation of the binary gate in digital computing leads us to
+one final important insight: When switching computer hardware to neuromorphic
+hardware, it does not suffice to merely copy the brain's architecture and
+continue to use boolean logic like is done in modern computers. It is far too
+fragile, requiring an enormous amount of neurons and an inefficient use of
+compute power.
+
+Instead, if neuromorphic computing is to become an integral part of
+computational methods, it is key the field adapts to the biological blueprint.
+Naturally that would inspire radically new ways of problem solving in signal
+processing.
+
+Before that is reached however, a stark increase in the stability of the
+hardware is required, as even a jelly fish has over 5000 neurons
+\cite{neuronsjellyfish}. This paper has provided a qualitative review of the
+chip, however quantitative measurements are still lacking. We hypothesize that
+temporal differences in the internal temperature of the chip is likely the main
+culprit of this instability, therefore describing both the sensitivity to a
+change in temperature and heat generation by the chip during average usage could
+be useful indicators of the chips ability to perform consistently.
+
 
 \bibliography{main}
 \bibliographystyle{ieeetr}
