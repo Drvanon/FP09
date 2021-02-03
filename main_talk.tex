@@ -205,9 +205,7 @@
     \begin{itemize}
     		\item no excitatory/inhibitory synapses,  just leakage potential,
     		\textbf{but: } $E_l>V_{th}\quad \Rightarrow$ Spikes
-    		\item Firing rate measured to $t_{fir} = (16.10\pm 0.11)$\begin{center}
-    		•
-    		\end{center}
+    		\item Firing rate measured to $t_{fir} = (16.10\pm 0.11)$ms
     \end{itemize}
 \end{frame}
 
@@ -318,13 +316,14 @@
           	\begin{figure}
     				\centering
     				\includegraphics[width=\linewidth]{figures/epsp_fall_+.pdf}
+    				High Drvifall
  		   \end{figure}
 
           \column{0.4\linewidth}
           \begin{figure}
     				\centering
     				\includegraphics[width=\linewidth]{figures/epsp_fall_-.pdf}
-    				%\caption{source: FP09 neuromorphic computing script,  2020}
+    				Low Drvifall
  		   \end{figure}
 	\end{columns}
 
@@ -333,6 +332,7 @@
           	\begin{figure}
     				\centering
     				\includegraphics[width=\linewidth]{figures/epsp_out_+.pdf}
+    				High Drviout
  		   \end{figure}
 
 
@@ -340,7 +340,7 @@
           \begin{figure}
     				\centering
     				\includegraphics[width=\linewidth]{figures/epsp_out_-.pdf}
-    				%\caption{source: FP09 neuromorphic computing script,  2020}
+    				Low Drviout
  		   \end{figure}
 
           	%% difference: minexc weight mininhweight
@@ -443,16 +443,8 @@
 	\includegraphics[width=\textwidth]{figures/stp_off.png}
 \end{frame}
 
-<<<<<<< HEAD
-%\begin{frame} --> maybe later
-	%\frametitle{Results - 4: Facilitating mode}
-%\end{frame}
-=======
-\begin{frame}
-	\frametitle{Results - 4: Facilitating mode}
 
-\end{frame}
-
+%\begin{frame} --> 
 \begin{frame}
     \frametitle{Results - 5: feed-forward networks}
     \begin{itemize}
@@ -461,11 +453,10 @@
         \item Inhibitory neurons in chains
     \end{itemize}
 \end{frame}
->>>>>>> 3c6dd402093664112c76f0d9c8311c8aa304242f
 
 \begin{frame}
     \frametitle{Results - 5: feed-forward networks}
-    \includegraphics[width=\textwidth]{figures/feedforward network.png}
+    \includegraphics[width=\textwidth]{figures/feedforwardnetwork.png}
 \end{frame}
 
 \begin{frame}
@@ -517,12 +508,8 @@
 		\item Create recurrent network with sparse connections, synapses inhibitory
 		\item Set $E_{leak} > E_{thresh}$ to introduce regular spiking; interrupted
 		by inhibitory synapses $\Rightarrow$ Randomness
-<<<<<<< HEAD
-		\item CV antiproportional to firing rate: lower firing rate $^\Rightarrow$ was 
-=======
-		\item CV antiproportional to firing rate: lower firing rate $Rightarrow$ was
->>>>>>> 3c6dd402093664112c76f0d9c8311c8aa304242f
-		interrupted more,  more variation
+		\item $CV = \sigma / \mu$ antiproportional to firing rate: lower firing rate 
+		$^\Rightarrow$ was interrupted more,  more variation
 	\end{itemize}
 
 \end{frame}
