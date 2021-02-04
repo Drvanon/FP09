@@ -36,7 +36,7 @@
 
 
 \title{FP09 - Neuromorphic computing}
-\author{R. Dorstijn (sd249) \& Moritz Epping (hh234)}
+\author{\textbf{Students: }R. Dorstijn (sd249) \& Moritz Epping (hh234) \\ \textbf{Tutor: }Jakob Kaiser}
 \date{February 2021}
 
 \begin{document}
@@ -47,7 +47,7 @@
     \begin{abstract}
         This paper presents a review of the SPIKEY chip for neuromorphic
         computing.  After a theoretical framework outlining the requirements
-        for a generic neuromorphic computing device has been given, this
+        for a simple neuromorphic computing device has been given, this
         specific hardware realization will be examined under these considerations.
         It will be shown that the SPIKEY chip exhibits all of the basic functions
         of neuromorphic hardware and is reliable for simple experiments.  Employing
@@ -201,7 +201,7 @@ The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The
 reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery
 of the voltage we observed strong fluctuations of the reset voltage.  We
 furthermore calculated the time between spikes and found a value of
-$t_{fir} = (16.10\pm 0.11)$ ms.  From \ref{fig:membranes_ex1} it becomes immediately
+$t_{fir} = (16.10\pm 0.11)$ ms.  From figure \ref{fig:membranes_ex1} it becomes 
 apparent that in this simple setup the neuron behaves as a capacitor that is
 being charged.  The firing rate could be increased by increasing either the
 leakage conductance,  leakage voltage or threshold voltage or by decreasing
@@ -308,7 +308,7 @@ computations.  We now want to evaluate how a single neuron behaves under the inf
  spike train allows us to average out these fluctuations.  The spike triggered average
  height of the post synaptic potentials is a good measure of the strength of the signal.
  Furthermore,  we measure the time scale on which the potential decays.
-The parameters determining the shape of the post synaptic potential can be chosen
+The parameters determining the shape of the synaptic conductance can be chosen
 from these ranges:
 \begin{align*}
 	\text{drviout} &\in \left[ 0.013, 1.667  \right] \\
@@ -363,14 +363,14 @@ leads to different post synaptic potentials.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/epsp_exc_fall_03_out_05.pdf}
-    \caption{EPSP for excitatory neuron}
+    \caption{EPSP for excitatory input}
     \label{fig:epsp_exc_fall}
 \end{figure}
 Note that for the same parameters,  the EPSP of the inhibitory neuron is much
 smaller in magnitude than the one of the excitatory neuron.
 It already became apparent that noise plays an important role (in fact it is very
 strong for a single potential).  Two types of noise need to be distinguished here:
-The temporal noise (different executions of the same process) and the neuron-to
+the temporal noise (different executions of the same process) and the neuron-to
 neuron noise (fixed pattern; due to production errors).  A good measure of the neuron-
 to-neuron noise is obtained by letting a neuron be stimulated by different synapses
 and recording the resulting height of the voltage spike.  A median of $2.64$mV was
@@ -378,6 +378,7 @@ found with the considerable standard deviation of $1.17$mV.  This is shown in
 \ref{MaxVoltHisto}.
 \begin{figure}
 		\includegraphics[width=0.5\textwidth]{figures/histo_maxVolt.pdf}
+		\caption{Histogram of the peak heights for stimulation of different neurons}
 		\label{MaxVoltHisto}
 \end{figure}
 To summarize,  it became apparent already for the simple case of single synaptic
@@ -396,12 +397,12 @@ $\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according t
 \begin{align*}
 	R + E + I &= 1 \\
 	\frac{dE}{dt} &= - \frac{E}{\tau_\text{facil}} + \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
-	\frac{dR}{dt} &= - \frac{I}{\tau_\text{rec}} - \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
+	\frac{dR}{dt} &= + \frac{I}{\tau_\text{rec}} - \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
 \end{align*}
-As an example we have showed the membrane potential as a response to regularly
+As an example we show the membrane potential as a response to regularly
 distributed spikes with a depressing mode in \ref{stp_depress}.  It can clearly be
 seen how the neuron seems to ''remember'' its local history by reacting less sensitive
-to voltage spikes if they follow close to previous ones.  As expected from the theory,
+to spikes if they follow close to previous ones.  As expected from the theory,
 the exponential decay of maximum voltage heights can be observed.  Again,  the response
 can be controlled by choosing the activation $U$ and time constant $\tau$ accordingly.
 \begin{figure}
@@ -495,7 +496,7 @@ This adds some randomness to an otherwise regularly spiking neuron population.
 Doing this produces a noise source that can be used for investigating other networks.
 To determine the qualification of this setup as a noise source we check for certain
 properties.  Typically,  the utilized noise is obtained from a Poisson process
-that can be characterised by its simple coefficient of variation
+that has a coefficient of variation
 \begin{equation}
 	CV = \frac{\sigma}{\mu} = 1
 \end{equation}
@@ -504,12 +505,13 @@ firing rate for each neuron and plot it against the CVs of inter-spike intervals
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/activity_sweep.png}
-    \caption{Parameter sweep of $w$ and $K$ to determine their effect on the activity of the neurons}
+    \caption{Parameter sweep of $w$ and $K$ to determine their effect on the activity 
+    of the neurons.  Activity is encoded in the colour scheme shown on the z-axis.}
     \label{fig:activity_sweep}
 \end{figure}
  %% insert 1.
 Then we perform a parameter sweep on the weight $w$ and the number of presynaptic
-partners $K$.  As expected, the mean activity is antiproportional to the connection weight
+partners $K$.  As expected, the mean activity decreases with connection weight
 and connection number (since we have inhibitory synapses).  Similarly,  a parameter sweep
 was done for the coefficient of variation.  Both procedures yield results with clear proportionalities
 between the quantity of interest and connection weight and number.  The fact that it is possible
