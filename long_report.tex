@@ -70,7 +70,7 @@ the dendrites.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/action-potential.png}
+    \includegraphics[width=\textwidth]{figures/action-potential.png}
     \caption{Formation of an action potential. Source:  \url{https://courses.lumenlearning.com/boundless-biology/chapter/how-neurons-communicate/}}
     \label{fig:action-potential}
 \end{figure}
@@ -164,10 +164,11 @@ In order to set a neuron to fire at a regular frequency $\tau_m$, we have to tak
 into account that $V_m$ will be reset to $V_\text{reset}$ when it hits
 $V_\text{thres}$. Equation \eqref{eq:diff-eq-sol} can be rephrased in terms of
 $t$.
-\[
+\begin{equation}
     \tau_m = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
     \frac{C_m}{g_l}
-\]
+    \label{eq:tau}
+\end{equation}
 
 The characteristic time constant $\tau_c$ of the system can be found by setting
 $V_\text{thres}$ as a function of $E_l$ and $V_\text{reset}$.
@@ -208,7 +209,7 @@ output neurons.} This is visualised in figure \ref{fig:feed-forward}.
 
 \begin{wrapfigure}{r}{0.5\textwidth}
     \centering
-    \includegraphics[width=.5\textwidth]{figures/feedforwardnetwork.png}
+    \includegraphics[width=.3\textwidth]{figures/feedforwardnetwork-cropped.png}
     \caption{Feed forward network with length 4 and population size 2. Two input
         neurons are drawn additionally. Exhibitory neurons and connections are drawn
         in red, inhibitory ones in blue.}
@@ -221,14 +222,14 @@ membrane potential increase that a signal transfer induces. The importance of
 this variable is crucial for networks as it nearly completely describes the
 behaviour of a network.
 
-
 \subsection{Recurrent Networks}
 
 \subsection{A Simple Computation - XOR}
 A very common binary operation that is particularly non-linear (and therefore
 more complex) is the XOR operation. It can be described with the truth table
 \ref{tab:XOR}.
-\begin{wraptable}{r}{.5\textwidth}
+
+\begin{table}[ht]
     \centering
     \begin{tabular}{c | c | c}
         A & B & Q \\ \hline
@@ -240,47 +241,47 @@ more complex) is the XOR operation. It can be described with the truth table
     \caption{Truth table of the XOR gate. For more information see:
     \cite{horowitz_hill_2020}}
     \label{tab:XOR}
-\end{wraptable}
-A trivial solution for this problem was found and dismissed thanks to its
-probable fragility.  Instead the institute provided a different network
-architecture that has significant benefits over the suggested one: it is much
-more robust to what is called referred to with `width' in section
-\ref{sec:feed-forward}. The inhibitory neurons that are operating in a recurrent
-fashion prevent leaking voltage from causing the any excitatory neuron in the
-network to fire out of line. This is especially important in an XOR gate, as the
-chance that noise would `cancel out' is negligible.
+\end{table}
+
+A simple solution for this problem is presented in figure
+\ref{fig:XOR-suggested}, however this was not used, as the institute provided a
+different network architecture that has significant benefits over the suggested
+one: it is much more robust to what is called referred to with `width' in
+section \ref{sec:feed-forward}. The inhibitory neurons that are operating in a
+recurrent fashion prevent leaking voltage from causing the any excitatory neuron
+in the network to fire out of line. This is especially important in an XOR gate,
+as the chance that noise would `cancel out' is negligible.
 
 \begin{figure}
     \centering
-    \includegraphics[width=.5\textwidth]{figures/XOR-used.png}
+    \includegraphics[width=\textwidth]{figures/XOR-used.png}
     \caption{Network that was used to test the ability of neurons to perform
         logical operations. Functions as an XOR gate.}
     \label{fig:XOR-used}
 \end{figure}
 
-
 \section{Experimental Procedure}
 
 \subsection{Investigating A Single Neuron}
-To assess the reliability of the spikey chip, it is first necessary to investigate 
-the most simple configuration. This consists of a single neuron without any 
-input.  As described in section 1.3,  the circuit then simplifies significantly.  
-The chip can be configured in this setup by setting the conductances 
+To assess the reliability of the spikey chip, it is first necessary to investigate
+the most simple configuration. This consists of a single neuron without any
+input.  As described in section 1.3,  the circuit then simplifies significantly.
+The chip can be configured in this setup by setting the conductances
 corresponding to other inputs to zero.  \par
-By setting the leakage potential above the threshold potential, we can bring 
-the neuron into a constant firing regime despite no other synaptic input.  
-Values of $E_l = -50$mV and $V_{thres} = -55$mV.  The firing rate was 
-measured to equal $t_{fir} = (16.10\pm0.11)$ms.  According to the circuit 
-diagram,  the operation of the spikey chip in this setup corresponds to 
-charging a capacitor with a current given by $I(t) = g_l(t)E_l$.  This 
-characteristic voltage behaviour of charging a capacitor can be seen 
-in \ref{fig:membranes_ex1}.  When increasing the leakage conductance $g_l$ we 
-could observe shorter spike times.  This agrees well with our theoretical 
-understanding of the model since we essentially charge the current with a 
-stronger current,  thus reaching the firing-inducing threshold voltage sooner.  
+By setting the leakage potential above the threshold potential, we can bring
+the neuron into a constant firing regime despite no other synaptic input.
+Values of $E_l = -50$mV and $V_{thres} = -55$mV.  The firing rate was
+measured to equal $t_{fir} = (16.10\pm0.11)$ms.  According to the circuit
+diagram,  the operation of the spikey chip in this setup corresponds to
+charging a capacitor with a current given by $I(t) = g_l(t)E_l$.  This
+characteristic voltage behaviour of charging a capacitor can be seen
+in \ref{fig:membranes_ex1}.  When increasing the leakage conductance $g_l$ we
+could observe shorter spike times.  This agrees well with our theoretical
+understanding of the model since we essentially charge the current with a
+stronger current,  thus reaching the firing-inducing threshold voltage sooner.
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/fp_task1_1membrane.png}
+    \includegraphics[width=\textwidth]{figures/fp_task1_1membrane.png}
     \caption{Voltage over a single neuron with leakage potential over threshold potential}
     \label{fig:membranes_ex1}
 \end{figure}
@@ -303,7 +304,7 @@ were all correct within their respective standard deviation:
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/4membranes.png}
+    \includegraphics[width=\textwidth]{figures/4membranes.png}
     \caption{Biological membrane potential of four membranes with the same
     setting. The red dots indicate when the digital processing units recognizes
     that voltage reaches the threshold. The rates for the signals are
@@ -320,7 +321,7 @@ infeasible.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/rate-distribution.png}
+    \includegraphics[width=\textwidth]{figures/rate-distribution.png}
     \caption{Distribution of firing rate for the same across one side of the
     chip.}
     \label{fig:distribution}
@@ -342,71 +343,72 @@ to.
 
 
 \subsection{A Single Neuron with Synaptic Input}
-Having confirmed that the most basic behaviour of the chip agrees with the 
-expectations of the model,  a more complicated setup could be investigated.  
-The computational power of neurons stems from their interconnectedness.  Thus it 
-is crucial to evaluate how a neuron responds to input from other neurons 
-(synaptic input).  The quantity of interest here is the membrane potential of 
-the neuron under scrutiny.  This voltage can be easily monitored as a function 
-of time using the pynn.record() function.  As discussed in the theory section,  
-we have two types of synapses: Excitatory ones inducing positive spikes and 
-inhibitory ones inducing negative spikes.  It is actually crucial to have both 
-types of synapses to perform calculations.  This can be understood analogously 
-to positive and negative weights in artificial neural network that describe the 
-influence of some features on the neuron.  Besides the requirement to have two 
-different types of synapses that have different behaviour it is also crucial to 
-examine in what ways the synapse can form the standard input of a spike into 
-an EPSP.  That is,  how big the transmitted spike will be and how fast it decays.   
-\subsubsection{•}
-To start with the latter,  the effect of the parameters \textbf{drvifall} and 
+Having confirmed that the most basic behaviour of the chip agrees with the
+expectations of the model,  a more complicated setup could be investigated.
+The computational power of neurons stems from their interconnectedness.  Thus it
+is crucial to evaluate how a neuron responds to input from other neurons
+(synaptic input).  The quantity of interest here is the membrane potential of
+the neuron under scrutiny.  This voltage can be easily monitored as a function
+of time using the pynn.record() function.  As discussed in the theory section,
+we have two types of synapses: Excitatory ones inducing positive spikes and
+inhibitory ones inducing negative spikes.  It is actually crucial to have both
+types of synapses to perform calculations.  This can be understood analogously
+to positive and negative weights in artificial neural network that describe the
+influence of some features on the neuron.  Besides the requirement to have two
+different types of synapses that have different behaviour it is also crucial to
+examine in what ways the synapse can form the standard input of a spike into
+an EPSP.  That is,  how big the transmitted spike will be and how fast it decays.
+
+\subsubsection{.}
+To start with the latter,  the effect of the parameters \textbf{drvifall} and
 \textbf{drviout} was investigated.  The following results were found:
 \begin{itemize}
-	\item \textbf{Drviout} controls the magnitude of the voltage spike.  By 
+	\item \textbf{Drviout} controls the magnitude of the voltage spike.  By
 	increasing its value the spike height was reduced.
-	\item \textbf{Drvifall} controls the width of the peak, that is,  how fast 
+	\item \textbf{Drvifall} controls the width of the peak, that is,  how fast
 	it decays.  Increasing this parameter makes the peak more sharp.
 \end{itemize}
-It could also be observed that those two parameters did not only affect the 
-height or width of the voltage spike exclusively.  Instead,  decreasing drvifall 
-was also found to lead to spike of smaller magnitude besides making the 
-voltage ramp fall more slowly.  This is important to consider since it affects 
-the degree of precision to which we can fine-tune the EPSP of a neuron.  
+It could also be observed that those two parameters did not only affect the
+height or width of the voltage spike exclusively.  Instead,  decreasing drvifall
+was also found to lead to spike of smaller magnitude besides making the
+voltage ramp fall more slowly.  This is important to consider since it affects
+the degree of precision to which we can fine-tune the EPSP of a neuron.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/epsp_default.pdf}
+    \includegraphics[width=\textwidth]{figures/epsp_default.pdf}
     \caption{Post synaptic potential for default settings of parameters}
     \label{fig:epsp_default}
 \end{figure}
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/epsp_out_-.pdf}
+    \includegraphics[width=\textwidth]{figures/epsp_out_-.pdf}
     \caption{EPSP for low drviout.}
     \label{fig:epsp_out-}
 \end{figure}
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/epsp_out_+.pdf}
+    \includegraphics[width=\textwidth]{figures/epsp_out_+.pdf}
     \caption{EPSP for high drviout.}
     \label{fig:epsp_out+}
 \end{figure}
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/epsp_fall_-.pdf}
+    \includegraphics[width=\textwidth]{figures/epsp_fall_-.pdf}
     \caption{EPSP for low drvifall.}
     \label{fig:epsp_fall-}
 \end{figure}
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/epsp_fall_+.pdf}
+    \includegraphics[width=\textwidth]{figures/epsp_fall_+.pdf}
     \caption{EPSP for high drvifall.}
     \label{fig:epsp_fall+}
 \end{figure}
-\subsubsection{•}
-To verify that apart from the shape the general form of the signal could 
-also be modified,  the parameters were set in such a way that inhibitory 
-synapses were achieved.  For the same parameters (\textbf{drvifall} = 0.3,  
-\textbf{drviout} = 0.5) the EPSP was observed for both inhibitory and 
+\subsubsection{.}
+To verify that apart from the shape the general form of the signal could
+also be modified,  the parameters were set in such a way that inhibitory
+synapses were achieved.  For the same parameters (\textbf{drvifall} = 0.3,
+\textbf{drviout} = 0.5) the EPSP was observed for both inhibitory and
 excitatory neurons.  It can clearly be seen how they lead to different shapes.
 \begin{figure}
     				\centering
@@ -419,26 +421,26 @@ excitatory neurons.  It can clearly be seen how they lead to different shapes.
     				\label{exc_syn}
     				%\caption{source: FP09 neuromorphic computing script,  2020}
 \end{figure}
-\subsubsection{•}
-Besides investigating whether the simple circuits behave as expected, it is also 
+\subsubsection{.}
+Besides investigating whether the simple circuits behave as expected, it is also
 crucial to develop an idea of what role fluctuations play in this experiment.  Only
-if we know the source and extent of fluctuations can we try to work on a model 
-that corrects them when we want to use the neuromorphic chip for actual 
-computations.  Before,  we have already looked at temporal noise (e.g. for the 
-regular spiking regime in ex.1).  Now we want to investigate the synapse-to-synapse 
-noise.  For this we vary the row of the stimulating synapse for identical 
-parameters and plot a histogram of the EPSP heights.  In \ref{MaxVoltHisto} this 
-distribution can be seen.  It is quite obvious that despite identical parameters 
-the individual stimulating synapse matters a long with regards to the resulting 
-EPSP height.  The mean is $3.06$mV,  but since the distribution is clearly 
-asymmetric,  the median is a more meaningful quantity.  This was determined 
-to be $2.64$.  The standard deviation is with $1.17$mV very large.  We can 
-conclude that production errors of different synapses need to be taken into 
-account to get correct results. 
+if we know the source and extent of fluctuations can we try to work on a model
+that corrects them when we want to use the neuromorphic chip for actual
+computations.  Before,  we have already looked at temporal noise (e.g. for the
+regular spiking regime in ex.1).  Now we want to investigate the synapse-to-synapse
+noise.  For this we vary the row of the stimulating synapse for identical
+parameters and plot a histogram of the EPSP heights.  In \ref{MaxVoltHisto} this
+distribution can be seen.  It is quite obvious that despite identical parameters
+the individual stimulating synapse matters a long with regards to the resulting
+EPSP height.  The mean is $3.06$mV,  but since the distribution is clearly
+asymmetric,  the median is a more meaningful quantity.  This was determined
+to be $2.64$.  The standard deviation is with $1.17$mV very large.  We can
+conclude that production errors of different synapses need to be taken into
+account to get correct results.
 \begin{figure}
 		\includegraphics[width=0.7\textwidth]{figures/histo_maxVolt.pdf}
 		\label{MaxVoltHisto}
-	\end{figure}		
+	\end{figure}
 \subsection{Short Term Plasticity}
 
 \subsection{Feed-Forward Networks}
@@ -458,7 +460,7 @@ account to get correct results.
 \subsection{Short Term Plasticity}
 
 \subsection{Feed-Forward Networks}
-A feed-forward network is described by the population number, the chain length 
+A feed-forward network is described by the population number, the chain length
 (see figure \ref{fig:feed-forward}) and the several weights of the following
 type connections:
 \begin{itemize}
@@ -494,7 +496,7 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=.5\textwidth]{figures/feedforward signals loop.png}
+    \includegraphics[width=\textwidth]{figures/feedforward signals loop.png}
     \caption{Feed-forward network configured in a loop. The population is 5, as
         is the chain length. Note that at the end the width starts to increase.
         The top figure shows all signals send by the neurons. The blue area
@@ -507,6 +509,34 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 \subsection{Recurrent Networks}
 
 \subsection{A Simple Computation - XOR}
+A challenge that comes with a network like this is to find the correct set of
+weights in order for the network to operate as expected. This was achieved by
+plotting all signals sent in the same graph, as can be seen in figure
+\ref{fig:XOR-output}. This allowed for a speedy diagnosis of the network by
+showing what expected signals were missing. An additional script was present
+that would match the fired signals to expected time stamps, giving a
+quantitative description of the quality of the network. This script would
+generate input signals, and perform the XOR operation internally, creating an
+internal expectation for when each neuron should fire or not.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/XOR-output.png}
+    \caption{Output of the diagnostic tool for rating the performance of the XOR network.}
+    \label{fig:XOR-output}
+\end{figure}
+
+It quickly became clear that though a temporarily optimal configuration had been
+found, it was not to last long, as a mere half hour later the accuracy had
+dropped from 39/40 to 33/40. However the accuracy was large enough to show that
+as the input was temporally shifted using a normal distribution, it did not
+immediately lose it's accuracy. Only after the FWHM of the jitter became larger
+than 15 milliseconds, the accuracy dropped below unrecognizable. This is
+remarkable fact is likely due to the fact that the potential does not
+immediately decay to the rest potential but remains high for some some time.
+This could be useful in applications where signals are not perfectly timed, but
+relative simultaneity is required.
+
 
 \section{Final Conclusions}
 Our results clearly show that the SPIKEY chip can be used for experimenting with
