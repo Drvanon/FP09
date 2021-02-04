@@ -45,24 +45,24 @@
 \twocolumn[
   \begin{@twocolumnfalse}
     \begin{abstract}
-        This paper presents a review of the SPIKEY chip for neuromorphic 
-        computing.  After a theoretical framework outlining the requirements 
+        This paper presents a review of the SPIKEY chip for neuromorphic
+        computing.  After a theoretical framework outlining the requirements
         for a generic neuromorphic computing device has been given, this
         specific hardware realization will be examined under these considerations.
-        It will be shown that the SPIKEY chip exhibits all of the basic functions 
-        of neuromorphic hardware and is reliable for simple experiments.  Employing 
-        this chip for actual applications such as computations however is not 
+        It will be shown that the SPIKEY chip exhibits all of the basic functions
+        of neuromorphic hardware and is reliable for simple experiments.  Employing
+        this chip for actual applications such as computations however is not
         advisable since production errors significantly alter the chip's behaviour
-        in a non-trivial way and environmental factors such as temperature 
-        fluctuations have an equally important effect on making the chip 
-        unreliable for large-scale applications.  A procedure to counter 
-        some of these effects will be given.
+        in a non-trivial way and environmental factors such as temperature
+        fluctuations have an equally important effect on making the chip
+        unreliable for large-scale applications.  A procedure to counter
+        some of these effects will be provided.
     \end{abstract}
   \end{@twocolumnfalse}
 ]
 \section{Motivation and Theory}
 \subsection{Motivation}
-Brains and computers often are compared because of their shared purpose,
+Brains and computers often are compared because of their shared purpose:
 decision making, though they have irreconcilable differences in architecture.
 Modern computers function on the basis of the van Neumann
 architecture\cite{von-Neumann}, which separates the control unit from the memory
@@ -75,8 +75,8 @@ This most likely has provided significant evolutionary pressure for hominids to
 optimize metabolic resource usage\cite{seymour2016fossil}.  For this reason a new
 architecture for computers has been suggested: neuromorphic\footnote{``Neuro''
 as in brain, ``-morphic'' as in having the shape of, forming ``having the shape
-of a brain''.} computing.  Besides more efficient energy usage,  the scientific 
-interest in neuromorphic computing is also grounded in the idea of trying to 
+of a brain''.} computing.  Besides more efficient energy usage,  the scientific
+interest in neuromorphic computing is also grounded in the idea of trying to
 understand the human brain by rebuilding it artificially.
 
 \subsection{Signal processing in the brain}
@@ -88,44 +88,40 @@ dendrites where the axon of one meets the dendrite of the other.}, creating an
 ion wave crossing the entire membrane of the neuron, reaching it's axon,
 allowing it to pass the signal on to other neurons.
 
-The potential at the neuron membrane as a function of time is plotted in figure
-\ref{fig:action-potential}. Here it is demonstrated how a potential shift caused
-by pre-synaptic\footnote{That is the neuron that passes on a signal to the
-post-synaptic one.} neurons initiates a spike in the membrane potential, which
-forces a release of ion containing vesicles at the terminal
-bulb\footnote{\textbf{Terminal bulb}: the collections of appendages at the end
-of the axon that it uses to pass the signal on to connected neurons.},
-facilitating the transfer of the signal by changing the relative potential at
-the dendrites.
+The potential at the neuron membrane as a function of time has three main
+domains: there is the rest voltage, where the potential is constant, there is
+the peak, which looks roughly Gaussian and then there is a short period that the
+membrane is hyperpolarized, meaning that it is so negatively charged that new
+signals do not instigate a new response.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=.5\textwidth]{figures/action-potential.png}
-    \caption{Formation of an action potential. Source:  \url{https://courses.lumenlearning.com/boundless-biology/chapter/how-neurons-communicate/}}
-    \label{fig:action-potential}
-\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=.5\textwidth]{figures/action-potential.png}
+%     \caption{Formation of an action potential. Source:  \url{https://courses.lumenlearning.com/boundless-biology/chapter/how-neurons-communicate/}}
+%     \label{fig:action-potential}
+% \end{figure}
 
 \subsection{The LIF model}
 In order to emulate the behaviour electronically, a leaky integrate and fire
 (LIF) model is used. A single neuron is represented by an electronic circuit
 like the one in figure \ref{fig:circuit}. When the chip is not excited, nor
 inhibited there is a constant ``leak'' voltage present on the membrane,
-representing the biological rest potential of the membrane potential.  The neuron, 
-represented as a capacitor with capacitance $C_m$ is charged and decharged 
-by the input of other neurons. With constant excitatory (facilitating spikes) and 
-inhibitory (suppressing spikes) potential,  all dynamics are encoded in the 
-time-dependent conductances $g_j(t),  g_x(t)$.  A spike coming from either 
-of these two synapses is implemented by temporarily increasing the corresponding 
-conductance.  When the threshold voltage $V_\text{thres}$,  is reached,  
-the amplifier functioning as a comparator in this setting,  sends out a 
-$V_{CC}$ signal to a digital unit that processes that the neuron has fired 
-and is responsible for closing the switch that keeps the 
+representing the biological rest potential of the membrane potential.  The neuron,
+represented as a capacitor with capacitance $C_m$ is charged and decharged
+by the input of other neurons. With constant excitatory (facilitating spikes) and
+inhibitory (suppressing spikes) potential,  all dynamics are encoded in the
+time-dependent conductances $g_j(t),  g_x(t)$.  A spike coming from either
+of these two synapses is implemented by temporarily increasing the corresponding
+conductance.  When the threshold voltage $V_\text{thres}$,  is reached,
+the amplifier functioning as a comparator in this setting,  sends out a
+$V_{CC}$ signal to a digital unit that processes that the neuron has fired
+and is responsible for closing the switch that keeps the
 ``membrane potential'' $V_m$ at some $V_\text{reset}$ for the refractory
 period. This time is meant to mimic the period the voltage at the membrane
 increases non-linearly and therefore loses its sensitivity to input. The digital
-processing unit is also responsible for sending the signal (in terms of a 
-uniform spike; ''All-or-nothing reponse'') to the neurons that the are 
-connected to one that just fired.  The synapses then transform this voltage 
+processing unit is also responsible for sending the signal (in terms of a
+uniform spike; ''All-or-nothing reponse'') to the neurons that the are
+connected to one that just fired.  The synapses then transform this voltage
 spike into an excitatory or inhibitory input for the other neurons.
 
 \begin{figure}[ht]
@@ -157,32 +153,12 @@ spike into an excitatory or inhibitory input for the other neurons.
     \label{fig:circuit}
 \end{figure}
 
-
-\begin{figure}[ht]
-    \centering
-    \begin{circuitikz}[scale = .6, transform shape]
-        \draw (4, 0)    to node[midway, above]{$V_m$} (8.5, 0) node[op amp, anchor=+](A1){}; % main line
-        \draw (A1.out)  to[short, l=$V_\text{out}$, -o] ++(1, 0);
-        \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
-        \draw (4, 0)    to[vR, l=$g_i$, *-] (4, -2)
-                        to[battery1, l=$E_g$] (4, -3) node[ground] {} (4, -4);
-        \draw (6, 0)    to[C, l=$C_m$] (6, -2)
-                        node[ground] {} (6, -2);
-        \draw (8, -3)   to[short, l_=$V_\text{reset}$, o-] (8, -1)
-                        to[short, o-] (7.5, -1)
-                        to[normal open switch, -*] (7.5, 0);
-    \end{circuitikz}
-    \caption{Circuit of a single neuron in a LIF chip.}
-    \label{fig:circuit}
-\end{figure}
-
-
 \section{Execution \& Results}
-Having laid out the theoretical foundations and characteristics each device 
-for neuromorphic computing should exhibit,  it now needs to be investigated 
-whether the hardware at hand fulfills these requirements.  This process begins 
-by investigating the most simple behaviour and only once it has been validated 
-that this behaves as expected more complicated setups such as networks 
+Having laid out the theoretical foundations and characteristics each device
+for neuromorphic computing should exhibit,  it now needs to be investigated
+whether the hardware at hand fulfills these requirements.  This process begins
+by investigating the most simple behaviour and only once it has been validated
+that this behaves as expected more complicated setups such as networks
 can be analyzed.
 A rather interesting setup was provided by the university of Heidelberg. It
 hosted a SPIKEY chip on its grounds, which was physically inaccessible due to
@@ -225,11 +201,12 @@ The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The
 reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery
 of the voltage we observed strong fluctuations of the reset voltage.  We
 furthermore calculated the time between spikes and found a value of
-$t_{fir} = (16.10\pm 0.11)$ ms.  From \ref{fig:membranes_ex1} it becomes immediately 
-apparent that in this simple setup the neuron behaves as a capacitor that is 
-being charged.  The firing rate could be increased by increasing either the 
-leakage conductance,  leakage voltage or threshold voltage or by decreasing 
+$t_{fir} = (16.10\pm 0.11)$ ms.  From \ref{fig:membranes_ex1} it becomes immediately
+apparent that in this simple setup the neuron behaves as a capacitor that is
+being charged.  The firing rate could be increased by increasing either the
+leakage conductance,  leakage voltage or threshold voltage or by decreasing
 the capacitance of the LiF circuit.
+
 \subsection{Calibrating neuron parameters}
 %% Robin  %%
 
@@ -255,10 +232,11 @@ In order to set a neuron to fire at a regular frequency $\tau_m$, we have to tak
 into account that $V_m$ will be reset to $V_\text{reset}$ when it hits
 $V_\text{thres}$. Equation \eqref{eq:diff-eq-sol} can be rephrased in terms of
 $t$.
-\[
+\begin{equation}
     \tau_m = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
     \frac{C_m}{g_l}
-\]
+    \label{eq:tau}
+\end{equation}
 
 The characteristic time constant $\tau_c$ of the system can be found by setting
 $V_\text{thres}$ as a function of $E_l$ and $V_\text{reset}$.
@@ -293,18 +271,6 @@ for this $g_l$ was adjusted individually for all of the membranes so that they
 were all correct within their respective standard deviation:
 \SI{20.1}{\milli\volt}, \SI{55.0}{\milli\volt}, \SI{60.0}{\milli\volt},
 \SI{20.5}{\milli\volt}.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=.5\textwidth]{figures/4membranes.png}
-    \caption{Biological membrane potential of four membranes with the same
-    setting. The red dots indicate when the digital processing units recognizes
-    that voltage reaches the threshold. The rates for the signals are
-    \SI{1.02(2)e1}{\milli\second}, \SI{2.41(3)e1}{\milli\second},
-    \SI{2.36(1)e1}{\milli\second}, \SI{1.15(1)e1}{\milli\second}, in the same
-    order that they presented in the image. }
-    \label{fig:4membranes}
-\end{figure}
 
 The scale of the problem becomes even more clear when considering the that one
 half of the SPIKEY chip has a rate distribution like presented in figure
@@ -342,7 +308,7 @@ computations.  We now want to evaluate how a single neuron behaves under the inf
  spike train allows us to average out these fluctuations.  The spike triggered average
  height of the post synaptic potentials is a good measure of the strength of the signal.
  Furthermore,  we measure the time scale on which the potential decays.
-The parameters determining the shape of the post synaptic potential can be chosen 
+The parameters determining the shape of the post synaptic potential can be chosen
 from these ranges:
 \begin{align*}
 	\text{drviout} &\in \left[ 0.013, 1.667  \right] \\
@@ -382,7 +348,7 @@ and $\text{drvifall}=1.3$.
  %   \label{fig:epsp_fall+}
 %\end{figure}
 We conclude that reducing drvifall leads to higher spikes while reducing drviout
-leads to more slowly decaying (and lower) spikes.  \par 
+leads to more slowly decaying (and lower) spikes.  \par
 The ability of a neuron to perform computations (decisions) comes from the fact
 that it can interpret specific spikes from input neurons as either suggesting
 a likely decision (excitatory,  making spike more likely) or  a less likely decision
@@ -406,19 +372,19 @@ It already became apparent that noise plays an important role (in fact it is ver
 strong for a single potential).  Two types of noise need to be distinguished here:
 The temporal noise (different executions of the same process) and the neuron-to
 neuron noise (fixed pattern; due to production errors).  A good measure of the neuron-
-to-neuron noise is obtained by letting a neuron be stimulated by different synapses 
+to-neuron noise is obtained by letting a neuron be stimulated by different synapses
 and recording the resulting height of the voltage spike.  A median of $2.64$mV was
-found with the considerable standard deviation of $1.17$mV.  This is shown in 
+found with the considerable standard deviation of $1.17$mV.  This is shown in
 \ref{MaxVoltHisto}.
 \begin{figure}
 		\includegraphics[width=0.5\textwidth]{figures/histo_maxVolt.pdf}
 		\label{MaxVoltHisto}
-\end{figure}		
-To summarize,  it became apparent already for the simple case of single synaptic 
-input that while the chip behaves as expected and gives certain freedom in tuning 
-the response of neurons to input (thus allowing computations),  noise plays a very 
-significant role to such an extent that it will easily lead to wrong results when not 
-accounted for.  
+\end{figure}
+To summarize,  it became apparent already for the simple case of single synaptic
+input that while the chip behaves as expected and gives certain freedom in tuning
+the response of neurons to input (thus allowing computations),  noise plays a very
+significant role to such an extent that it will easily lead to wrong results when not
+accounted for.
 \subsection{Short Term Plasticity}
 Short-term plasticity (STP) is a key feature of neurons that allows learning.
 \textit{Plasticity} refers to the ability of changing synapse weights dynamically.
@@ -432,11 +398,11 @@ $\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according t
 	\frac{dE}{dt} &= - \frac{E}{\tau_\text{facil}} + \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
 	\frac{dR}{dt} &= - \frac{I}{\tau_\text{rec}} - \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
 \end{align*}
-As an example we have showed the membrane potential as a response to regularly 
-distributed spikes with a depressing mode in \ref{stp_depress}.  It can clearly be 
-seen how the neuron seems to ''remember'' its local history by reacting less sensitive 
-to voltage spikes if they follow close to previous ones.  As expected from the theory,  
-the exponential decay of maximum voltage heights can be observed.  Again,  the response 
+As an example we have showed the membrane potential as a response to regularly
+distributed spikes with a depressing mode in \ref{stp_depress}.  It can clearly be
+seen how the neuron seems to ''remember'' its local history by reacting less sensitive
+to voltage spikes if they follow close to previous ones.  As expected from the theory,
+the exponential decay of maximum voltage heights can be observed.  Again,  the response
 can be controlled by choosing the activation $U$ and time constant $\tau$ accordingly.
 \begin{figure}
 		\includegraphics[width=.5\textwidth]{figures/stp_depressing.png}
@@ -464,7 +430,7 @@ output neurons.} This is visualised in figure \ref{fig:feed-forward}.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.5\textwidth]{figures/feedforwardnetwork.png}
+    \includegraphics[width=.3\textwidth]{figures/feedforwardnetwork-cropped.png}
     \caption{Feed forward network with length 4 and population size 2. Two input
         neurons are drawn additionally. Exhibitory neurons and connections are drawn
         in red, inhibitory ones in blue.}
@@ -543,40 +509,26 @@ firing rate for each neuron and plot it against the CVs of inter-spike intervals
 \end{figure}
  %% insert 1.
 Then we perform a parameter sweep on the weight $w$ and the number of presynaptic
-partners $K$.  As expected, the mean activity is antiproportional to the connection weight 
-and connection number (since we have inhibitory synapses).  Similarly,  a parameter sweep 
+partners $K$.  As expected, the mean activity is antiproportional to the connection weight
+and connection number (since we have inhibitory synapses).  Similarly,  a parameter sweep
 was done for the coefficient of variation.  Both procedures yield results with clear proportionalities
-between the quantity of interest and connection weight and number.  The fact that it is possible 
-to find these relationships qualifies the SPIKEY chip as a noise source for other neuromorphic 
-devices since the average frequency of random spikes can be controlled (activity) and the type 
+between the quantity of interest and connection weight and number.  The fact that it is possible
+to find these relationships qualifies the SPIKEY chip as a noise source for other neuromorphic
+devices since the average frequency of random spikes can be controlled (activity) and the type
 of distribution can be chosen (defined by some CV).
 
 
 \subsection{A Simple Computation: XOR}
 A very common binary operation that is particularly non-linear (and therefore
-more complex) is the XOR operation. It can be described with the truth table
-\ref{tab:XOR}.
-\begin{table}
-    \centering
-    \begin{tabular}{c | c | c}
-        A & B & Q \\ \hline
-        0 & 0 & 0 \\
-        0 & 1 & 1 \\
-        1 & 0 & 1 \\
-        1 & 1 & 0
-    \end{tabular}
-    \caption{Truth table of the XOR gate. For more information see:
-    \cite{horowitz_hill_2020}}
-    \label{tab:XOR}
-\end{table}
-A trivial solution for this problem was found and dismissed thanks to its
-probable fragility.  Instead the institute provided a different network
-architecture that has significant benefits over the suggested one: it is much
-more robust to what is called referred to with `width' in section
-\ref{sec:feed-forward}. The inhibitory neurons that are operating in a recurrent
-fashion prevent leaking voltage from causing the any excitatory neuron in the
-network to fire out of line. This is especially important in an XOR gate, as the
-chance that noise would `cancel out' is negligible.
+more complex) is the XOR operation\cite{horowitz_hill_2020}.  A trivial solution
+for this problem was found and dismissed thanks to its probable fragility.
+Instead the institute provided a different network architecture that has
+significant benefits over the suggested one: it is much more robust to what is
+called referred to with `width' in section \ref{sec:feed-forward}. The
+inhibitory neurons that are operating in a recurrent fashion prevent leaking
+voltage from causing the any excitatory neuron in the network to fire out of
+line. This is especially important in an XOR gate, as the chance that noise
+would `cancel out' is negligible.
 
 \begin{figure}
     \centering
@@ -651,8 +603,5 @@ be useful indicators of the chips ability to perform consistently.
 
 \bibliography{main}
 \bibliographystyle{ieeetr}
-
-\section{Appendix}
-% Notebook PDFs here
 
 \end{document}
