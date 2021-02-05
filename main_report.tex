@@ -47,11 +47,11 @@
     \begin{abstract}
         This paper presents a review of the SPIKEY chip for neuromorphic
         computing.  After a theoretical framework outlining the requirements
-        for a simple neuromorphic computing device has been given, this
-        specific hardware realization will be examined under these considerations.
-        It will be shown that the SPIKEY chip exhibits all of the basic functions
+        for a simple neuromorphic computing device has been given,  the
+        hardware realization on SPIKEY will be examined under these considerations.
+        It will be shown that the chip exhibits all of the basic functions
         of neuromorphic hardware and is reliable for simple experiments.  Employing
-        this chip for actual applications such as computations however is not
+        SPIKEY for actual applications such as computations however is not
         advisable since production errors significantly alter the chip's behaviour
         in a non-trivial way and environmental factors such as temperature
         fluctuations have an equally important effect on making the chip
@@ -62,7 +62,7 @@
 ]
 \section{Motivation and Theory}
 \subsection{Motivation}
-Brains and computers often are compared because of their shared purpose:
+Brains and computers often are compared because of their shared purpose, 
 decision making, though they have irreconcilable differences in architecture.
 Modern computers function on the basis of the van Neumann
 architecture\cite{von-Neumann}, which separates the control unit from the memory
@@ -156,40 +156,62 @@ or inhibitory input for the other neurons.
     \label{fig:circuit}
 \end{figure}
 
+\subsection{The SPIKEY chip}
+
+\begin{figure}
+	\includegraphics[width=.5\textwidth]{figures/script_spikey_schematic.png}
+	\caption{Overview of the basic operation process of the spikey chip.  Source:  
+	FP09 script}
+	\label{fig:scheme}
+\end{figure}
+
+On the SPIKEY chip 384 neurons are implemented as LiF circuits.  Each of these 
+can be arbitrarily connected to any other neuron.  When a neuron outputs a spike,  
+this signal is transmitted to the synapse driver, where it is transformed into a voltage 
+ramp (cf.  figure \ref{fig:scheme},  \textbf{A}).  This voltage ramp is then transmitted to a row of synapses that 
+transform it into a current signal,  depending on their local parameters (\textbf{B}).  Then 
+it is fed to the neurons on one of two channels.  Depending on which channel 
+it has been transmitted,  the current signal then leads to a time-dependent change 
+in either the excitatory or inhibitory conductance (\textbf{C}). 
+
+Emulations on this chip run faster by a factor of $10^4$ compared to biological 
+time.  This is because on the chip very small electrical components with correspondingly 
+low time constants are used. 
+
+
 \section{Execution \& Results}
 Having laid out the theoretical foundations and characteristics each device
-for neuromorphic computing should exhibit,  it now needs to be investigated
+for neuromorphic computing that implements LiF circuits should exhibit,  
+it now needs to be investigated
 whether the hardware at hand fulfills these requirements.  This process begins
 by investigating the most simple behaviour and only once it has been validated
 that this behaves as expected more complicated setups such as networks
 can be analyzed.
+
 A rather interesting setup was provided by the university of Heidelberg. It
 hosted a SPIKEY chip on its grounds, which was physically inaccessible due to
 the COVID-19 crisis, therefore it was connected to a job manager that could be
 written to by the Jülich Supercomputing Center, which hosted Jupyter notebooks
-for this purpose. A SPIKEY chip implements the LIF model physically.
+for this purpose. 
+
+User access to this chip is provided by the pyNN neural network modeling 
+language.  The spikey chip is implemented on a network module.  Digital spike 
+and configuration data is transferred between a field programmable gate array 
+and the spikey chip.  Since the communication bandwidth between the gate array 
+and the host computer is too low for meaningful real-time control of the experiment,  
+all relevant experiment data is stored in the RAM of the network module.  
+Digital-to-analog converters (DACs) can supply external parameters to the 
+spikey chip.  ADCs conversely are used to digitize measured membrane voltages
+for instance.
 
 \subsection{Investigation of a single neuron}
 %% Moritz  %%
 A single neuron will be investigated,  without considering any excitatory or
 inhibitory inputs.  This reduces the circuit of figure \ref{fig:circuit}
-to the dashed square drawn inside of it. The relevant parameters
-that appear in figure are:
-\begin{itemize}
-    \item $E_l$ setting the \textit{amount} of potential leaking into the `membrane',
-    \item $g_l$ determining how \textit{quickly} the potential leaks into the `membrane',
-    \item $C_m$ describing how much potential is leaked to ground,
-    \item $V_\text{reset}$ prescribing the starting point of a cycle.
-\end{itemize}
-
-Our final goal is to determine whether the spikey chip is a suitable hardware for
-neuromorphic computing.  Before eventually testing the chip in configurations
-that are actually capable of computations,  it is sensible to verify that the
-most basic circuit is working as desired.  Hence we split the LIF model circuit
-and only consider a neuron without output (neither excitatory nor inhibitory).
+to the dashed square drawn inside of it. 
 By setting the leakage potential above the threshold, we bring the circuit into
 a continuous firing regime. \par
-\textit{Threshold Voltage} $V_{th}$ and \textit{reset voltage} $E_r$ can be
+\textit{Threshold Voltage} $V_{th}$ and \textit{reset voltage} $V_\text{reset}$ can be
 specified by the user.  We run the circuit,  record the voltage of a neuron as
 a function of time and plot our results.
 
@@ -201,7 +223,7 @@ a function of time and plot our results.
 \end{figure}
 
 The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The
-reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery
+reset voltage of $V_\text{reset} = -80$ mV was not precisely reached.  After each recovery
 of the voltage we observed strong fluctuations of the reset voltage.  We
 furthermore calculated the time between spikes and found a value of
 $t_{fir} = (16.10\pm 0.11)$ ms.  From figure \ref{fig:membranes_ex1} it becomes
@@ -317,10 +339,10 @@ investigate for each parameter both extremes.  Default: $\text{drviout} := 0.80$
 and $\text{drvifall}=1.3$.
  \begin{figure}[ht]
      \centering
-     \includegraphics[width=.5\textwidth]{figures/epsp_summary.png}
+     \includegraphics[width=.5\textwidth]{figures/epsp_nice.png}
      \caption{EPSPs for excitatory input with different drviout,  drvifall
      parameters}
-     \label{fig:epsp_default}
+     \label{fig:epsp_nice}
  \end{figure}
 %\begin{figure}[ht]
     %\centering
@@ -347,12 +369,10 @@ and $\text{drvifall}=1.3$.
  %   \label{fig:epsp_fall+}
 %\end{figure}
 We conclude that reducing drvifall leads to sharper spikes while reducing drviout
-leads to higher spikes.  \par
-The ability of a neuron to perform computations (decisions) comes from the fact
-that it can interpret specific spikes from input neurons as either suggesting
-a likely decision (excitatory,  making spike more likely) or  a less likely decision
-(inhibitory, making spike less likely).  We observe that changing the synapse type
-leads to different post synaptic potentials.
+leads to higher spikes (see fig. \ref{fig:epsp_nice}).  We observe that changing 
+the synapse type leads to different post synaptic potentials.  An excitatory 
+synapse leads to a positive spike whereas an inhibitory synapse induces
+a negative spike (cf.  figures \ref{fig:epsp_exc_fall},  \ref{fig:epsp_exc_fall}).
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/epsp_inh_fall_03_out_05.pdf}
@@ -374,12 +394,12 @@ neuron noise (fixed pattern; due to production errors).  A good measure of the n
 to-neuron noise is obtained by letting a neuron be stimulated by different synapses
 and recording the resulting height of the voltage spike.  A median of $2.64$mV was
 found with the considerable standard deviation of $1.17$mV.  This is shown in
-\ref{MaxVoltHisto}.
+\ref{fig:MaxVoltHisto}.
 \begin{figure}
 		\includegraphics[width=0.5\textwidth]{figures/histo_maxVolt.pdf}
 		\caption{Histogram of the peak heights (voltage diffeerence) for stimulation
 		of different neurons}
-		\label{MaxVoltHisto}
+		\label{fig:MaxVoltHisto}
 \end{figure}
 To summarize,  it became apparent already for the simple case of single synaptic
 input that while the chip behaves as expected and gives certain freedom in tuning
@@ -399,17 +419,20 @@ $\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according t
 	\frac{dE}{dt} &= - \frac{E}{\tau_\text{facil}} + \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
 	\frac{dR}{dt} &= + \frac{I}{\tau_\text{rec}} - \sum_\text{spike} UR\delta(t-t_\text{spike} ) \\
 \end{align*}
+\begin{figure}
+		\includegraphics[width=.5\textwidth]{figures/stp_depressing.png}
+		\label{fig:depressing}
+		\caption{Implementation of the depressing mode in short term plasticity}
+\end{figure}
 As an example we show the membrane potential as a response to regularly
-distributed spikes with a depressing mode in \ref{stp_depress}.  It can clearly be
+distributed spikes with a depressing mode in figure 9.  It can clearly be
 seen how the neuron seems to ``remember'' its local history by reacting less sensitive
 to spikes if they follow close to previous ones.  As expected from the theory,
 the exponential decay of maximum voltage heights can be observed.  Again,  the response
-can be controlled by choosing the activation $U$ and time constant $\tau$ accordingly.
-\begin{figure}
-		\includegraphics[width=.5\textwidth]{figures/stp_depressing.png}
-		\label{stp_depress}
-		\caption{Implementation of the depressing mode in short term plasticity}
-\end{figure}
+can be controlled by choosing the activation $U$ and time constant $\tau$ accordingly. 
+A bigger value of $U$ leads to a stronger depression in the case of a depressing mode.  
+A larger time constant means the depression is weaker.
+
 
 \subsection{Feed-Forward Networks}
 \label{sec:feed-forward}
