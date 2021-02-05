@@ -317,12 +317,13 @@ from these ranges:
 We pick as default values approximately the mean of these intervals and
 investigate for each parameter both extremes.  Default: $\text{drviout} := 0.80$
 and $\text{drvifall}=1.3$.
-% \begin{figure}[ht]
-%     \centering
-%     \includegraphics[width=.5\textwidth]{figures/epsp_default.pdf}
-%     \caption{Post synaptic potential for default settings of parameters}
-%     \label{fig:epsp_default}
-% \end{figure}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[width=.5\textwidth]{figures/epsp_summary.png}
+     \caption{EPSPs for excitatory input with different drviout,  drvifall 
+     parameters}
+     \label{fig:epsp_default}
+ \end{figure}
 %\begin{figure}[ht]
     %\centering
     %\includegraphics[width=.5\textwidth]{figures/epsp_out_-.pdf}
@@ -347,8 +348,8 @@ and $\text{drvifall}=1.3$.
  %   \caption{EPSP for high drvifall.}
  %   \label{fig:epsp_fall+}
 %\end{figure}
-We conclude that reducing drvifall leads to higher spikes while reducing drviout
-leads to more slowly decaying (and lower) spikes.  \par
+We conclude that reducing drvifall leads to sharper spikes while reducing drviout
+leads to higher spikes.  \par
 The ability of a neuron to perform computations (decisions) comes from the fact
 that it can interpret specific spikes from input neurons as either suggesting
 a likely decision (excitatory,  making spike more likely) or  a less likely decision
@@ -357,7 +358,7 @@ leads to different post synaptic potentials.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/epsp_inh_fall_03_out_05.pdf}
-    \caption{EPSP for inhibitory neuron}
+    \caption{EPSP for inhibitory input}
     \label{fig:epsp_inh_fall}
 \end{figure}
 \begin{figure}[ht]
@@ -378,7 +379,8 @@ found with the considerable standard deviation of $1.17$mV.  This is shown in
 \ref{MaxVoltHisto}.
 \begin{figure}
 		\includegraphics[width=0.5\textwidth]{figures/histo_maxVolt.pdf}
-		\caption{Histogram of the peak heights for stimulation of different neurons}
+		\caption{Histogram of the peak heights (voltage diffeerence) for stimulation 
+		of different neurons}
 		\label{MaxVoltHisto}
 \end{figure}
 To summarize,  it became apparent already for the simple case of single synaptic
@@ -401,7 +403,7 @@ $\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according t
 \end{align*}
 As an example we show the membrane potential as a response to regularly
 distributed spikes with a depressing mode in \ref{stp_depress}.  It can clearly be
-seen how the neuron seems to ''remember'' its local history by reacting less sensitive
+seen how the neuron seems to ,,remember'' its local history by reacting less sensitive
 to spikes if they follow close to previous ones.  As expected from the theory,
 the exponential decay of maximum voltage heights can be observed.  Again,  the response
 can be controlled by choosing the activation $U$ and time constant $\tau$ accordingly.
@@ -500,7 +502,7 @@ that has a coefficient of variation
 \begin{equation}
 	CV = \frac{\sigma}{\mu} = 1
 \end{equation}
-with $\mu$ the mean and $\sigma$ the standard deviation. We first measure the
+with $\mu$ the mean of the inter-spike intervals and $\sigma$ their standard deviation. We first measure the
 firing rate for each neuron and plot it against the CVs of inter-spike intervals.
 \begin{figure}[ht]
     \centering
@@ -516,8 +518,9 @@ and connection number (since we have inhibitory synapses).  Similarly,  a parame
 was done for the coefficient of variation.  Both procedures yield results with clear proportionalities
 between the quantity of interest and connection weight and number.  The fact that it is possible
 to find these relationships qualifies the SPIKEY chip as a noise source for other neuromorphic
-devices since the average frequency of random spikes can be controlled (activity) and the type
-of distribution can be chosen (defined by some CV).
+devices since the average frequency of random spikes can be controlled (activity) 
+and besides the frequency stochastic properties of the noise can be determined  
+(by choosing the CV).
 
 
 \subsection{A Simple Computation: XOR}
