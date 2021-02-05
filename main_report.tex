@@ -401,7 +401,7 @@ $\tau_\text{rec}$ and $\tau_\text{facil}$ which govern the evolution according t
 \end{align*}
 As an example we show the membrane potential as a response to regularly
 distributed spikes with a depressing mode in \ref{stp_depress}.  It can clearly be
-seen how the neuron seems to ,,remember'' its local history by reacting less sensitive
+seen how the neuron seems to ``remember'' its local history by reacting less sensitive
 to spikes if they follow close to previous ones.  As expected from the theory,
 the exponential decay of maximum voltage heights can be observed.  Again,  the response
 can be controlled by choosing the activation $U$ and time constant $\tau$ accordingly.
@@ -442,7 +442,7 @@ figure \ref{fig:feed-forward}.
 \end{figure}
 
 In this experiment, connection weights also become relevant for the first time.
-Any synaptic connection is assigned a weight, this weight represents the
+Any synaptic connection is assigned a weight, this weight affects the
 membrane potential increase that a signal transfer induces. The importance of
 this variable is crucial for networks as it nearly completely describes the
 behaviour of a network.
@@ -464,9 +464,9 @@ type connections:
         (inh $\rightarrow$ ex)
 \end{itemize}
 This coincidentally is also the order of sensitivity (top being most sensitive),
-particularly when discussing the `width' of the signal. With this is meant the
-the amount of consequent signals that follow a single input signal. When having
-a large population, a high (inh $\rightarrow$ ex) wheight was capable of
+particularly when discussing the `width' of the signal. This was measured
+quantitatively by measuring how many signals were caused by a single input. When
+having a large population, a high (inh $\rightarrow$ ex) weight was capable of
 stopping the signal before it would reach the last neuron.
 
 An issue that occurred as the chain length was increased the width of the signal
@@ -478,18 +478,20 @@ a chain is 192, so that for a population of size $n$ the max chain length
 $c_\text{max}$ would be $c_\text{max} = 192 / n$.
 
 An interesting phenomena occurs when the network is configured to loop. That is
-to say the last neuron excites the first. Sadly it was not possible to set the
-signal delay, which would have allowed for more careful investigation, but still
-there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
+to say the last neuron excites the first. It was not possible to set the
+signal delay, which would have allowed for more careful investigation, by being
+able to see which signals were caused by an excitatory neuron signaling too
+often and what was the next round of signals, but still there was a clear effect
+visible in figure \ref{fig:feed-forward-loop}.
 
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth]{figures/feedforward-signals-loop.png}
-    \caption{Feed-forward network configured in a loop. The population is 5, as
-        is the chain length. Note that at the end the width starts to increase.
-        The top figure shows all signals send by the neurons. The blue area
-        represents inhibitory neurons, the red excitatory. The bottom figure
-        shows the membrane potential of the first excitatory neuron.}
+    \caption{Feed-forward network configured in a loop. The population size is
+        5, as is the chain length. Note that at the end the width starts to
+        increase.  The top figure shows all signals send by the neurons. The
+        blue area represents inhibitory neurons, the red excitatory. The bottom
+        figure shows the membrane potential of the first excitatory neuron.}
     \label{fig:feed-forward-loop}
 \end{figure}
 
@@ -513,28 +515,38 @@ firing rate for each neuron and plot it against the CVs of inter-spike intervals
     \label{fig:activity_sweep}
 \end{figure}
  %% insert 1.
-Then we perform a parameter sweep on the weight $w$ and the number of presynaptic
-partners $K$.  As expected, the mean activity decreases with connection weight
-and connection number (since we have inhibitory synapses).  Similarly,  a parameter sweep
-was done for the coefficient of variation.  Both procedures yield results with clear proportionalities
-between the quantity of interest and connection weight and number.  The fact that it is possible
-to find these relationships qualifies the SPIKEY chip as a noise source for other neuromorphic
-devices since the average frequency of random spikes can be controlled (activity)
-and besides the frequency stochastic properties of the noise can be determined
-(by choosing the CV).
+Then we perform a parameter sweep on the weight $w$ and the number of
+presynaptic partners $K$.  As expected, the mean activity decreases with
+connection weight and connection number (since we have inhibitory synapses).
+Similarly,  a parameter sweep was done for the coefficient of variation.  Both
+procedures yield results with clear proportionalities between the quantity of
+interest and connection weight and number.  The fact that it is possible to find
+these relationships qualifies the SPIKEY chip as a noise source for other
+neuromorphic devices since the average frequency of random spikes can be
+controlled (activity) and besides the frequency stochastic properties of the
+noise can be determined (by choosing the CV).
 
 
 \subsection{A Simple Computation: XOR}
-A very common binary operation that is particularly non-linear (and therefore
-more complex) is the XOR operation\cite{horowitz_hill_2020}.  A trivial solution
-for this problem was found and dismissed thanks to its probable fragility.
-Instead the institute provided a different network architecture that has
-significant benefits over the suggested one: it is much more robust to what is
-called referred to with `width' in section \ref{sec:feed-forward}. The
+A very common binary operation that is particularly non-linear is the XOR
+operation\cite{horowitz_hill_2020}. A trivial solution for this problem was
+found (see figure \ref{fig:XOR-suggested}) and dismissed thanks to its probable
+fragility. Instead the institute provided a different network architecture that
+has significant benefits over the suggested one: it is much more robust to what
+is called referred to with `width' in section \ref{sec:feed-forward}. The
 inhibitory neurons that are operating in a recurrent fashion prevent leaking
 voltage from causing the any excitatory neuron in the network to fire out of
 line. This is especially important in an XOR gate, as the chance that noise
 would `cancel out' is negligible.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/XOR-suggested.png}
+    \caption{Suggestion for a network that behaves like an XOR gate. Note that
+        the inhibitory weight has to be strong, so that it can inhibit the output
+        from signalling, even when it receives an input from both sides.}
+    \label{fig:XOR-suggested}
+\end{figure}
 
 \begin{figure}
     \centering
@@ -553,10 +565,11 @@ giving a quantitative description of the quality of the network.
 
 It quickly became clear that though a temporarily optimal configuration had been
 found, it was not to last long, as a mere half hour later the accuracy had
-dropped from 39/40 to 33/40. However the accuracy was large enough to show that
-as the input was temporally shifted using a normal distribution, it did not
-immediately lose it's accuracy. Only after the FWHM of the jitter became larger
-than 15 milliseconds, the accuracy dropped below unrecognizable. This is
+dropped from 39/40 to 33/40, confirming suspicions from earlier experiments.
+However the accuracy was large enough to show that as the input was temporally
+shifted using a normal distribution, it did not immediately lose it's accuracy.
+Only after the standard deviation of the jitter became larger than 15
+milliseconds, the network was unable to give a correct output anymore. This is
 remarkable fact is likely due to the fact that the potential does not
 immediately decay to the rest potential but remains high for some some time.
 This could be useful in applications where signals are not perfectly timed, but
@@ -567,21 +580,22 @@ Our results clearly show that the SPIKEY chip can be used for experimenting with
 neuromorphic computing in the physical world. Most importantly, it could
 verified that the elementary building block (LIF-circuit) behaved in a very
 favourable way. Different characteristic features in different realizations of
-that circuit in the hardware (due to production errors) can be observed but it
-was shown to be possible to calibrate each  ``neuron'' in a way that the effect
-of production errors is mostly cancelled. The circuit allows short term
+that circuit in the hardware (due to production variations) can be observed but
+it was shown to be possible to calibrate each  ``neuron'' in a way that the
+effect of production errors is mostly cancelled. The circuit allows short term
 plasticity,  a key trait of neurons that allows them to `learn'.  Finally,
 leaving the few-neuron regime, it was verified that the hardware can be used to
 model circuits with $\approx 200$ neurons, even binary logic was achievable with
 the hardware.
 
-However thanks to the temporal instability of the chip it is clearly not
-production ready. It is hard to think of a critical application that would have
-environmental conditions suited for this chip, that would be simultaneously cost
-effective. Calibration would likely be sufficiently time consuming that it would
-ruin any cost effectiveness. That is not to say that it is without application
-in the world of research, where it can be a useful tool to investigate behaviour
-of neural structures by making it behave like physical neurons.
+However thanks to the temporal instability of the chip and its production
+variations it is not production ready. It is hard to think of a critical
+application that would have environmental conditions suited for this chip, that
+would be simultaneously cost effective. Calibration would likely be sufficiently
+time consuming that it would ruin any cost effectiveness. That is not to say
+that it is without application in the world of research, where it can be a
+useful tool to investigate behaviour of neural structures by making it behave
+like physical neurons.
 
 \section{Discussion}
 Comparing our quite complicated realization of the XOR-gate to the standard
@@ -598,14 +612,14 @@ Naturally that would inspire radically new ways of problem solving in signal
 processing.
 
 Before that is reached however, a stark increase in the stability of the
-hardware is required, as even a jelly fish has over 5000 neurons
-\cite{neuronsjellyfish}. This paper has provided a qualitative review of the
-chip, however quantitative measurements are still lacking. We hypothesize that
-temporal differences in the internal temperature of the chip is likely the main
-culprit of this instability, therefore describing both the sensitivity to a
-change in temperature and heat generation by the chip during average usage could
-be useful indicators of the chips ability to perform consistently.
-
+hardware is required, as well as an increase in available neurons, as even a
+jelly fish has over 5000 neurons \cite{neuronsjellyfish}. This paper has
+provided a qualitative review of the chip, however quantitative measurements are
+still lacking. We hypothesize that temporal differences in the internal
+temperature of the chip is likely the main culprit of this instability,
+therefore describing both the sensitivity to a change in temperature and heat
+generation by the chip during average usage could be useful indicators of the
+chips ability to perform consistently.
 
 \bibliography{main}
 \bibliographystyle{plain}
