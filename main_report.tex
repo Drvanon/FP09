@@ -80,19 +80,25 @@ interest in neuromorphic computing is also grounded in the idea of trying to
 understand the human brain by rebuilding it artificially.
 
 \subsection{Signal processing in the brain}
-Neurons are the basic computational components of the
-brain, transmitting and morphing signals. Each neuron receives signals from
-others at the dendrites, which shift the electric potential at the membrane of
-the cell at the site of the synapse\footnote{The connection point of two
-dendrites where the axon of one meets the dendrite of the other.}, creating an
-ion wave crossing the entire membrane of the neuron, reaching it's axon,
-allowing it to pass the signal on to other neurons.
+Neurons are the basic computational components of the brain, transmitting and
+morphing signals. Each neuron receives signals from others at the dendrites,
+which shift the electric potential at the membrane of the cell at the site of
+the synapse\footnote{Synapse: the connection point of two dendrites where the
+axon of one meets the dendrite of the other.}. Once a critical amount of
+potential has been built up, an ion wave is caused to cross the entire membrane
+of the neuron, reaching it's axon, allowing it to pass the signal on to other
+neurons.
 
 The potential at the neuron membrane as a function of time has three main
-domains: there is the rest voltage, where the potential is constant, there is
-the peak, which looks roughly Gaussian and then there is a short period that the
-membrane is hyperpolarized, meaning that it is so negatively charged that new
-signals do not instigate a new response.
+domains: first there is the rest voltage, where the membrane potential is at its
+natural equilibrium, which gets perturbed by synaptic input. Pumps in the cell
+membrane cause the potential to return to an equilibrium. If sufficient signals
+arrive at the neuron with a run away effect is induced, where the potential
+exponentially increases, until it hits a maximum, leading into a third phase:
+hyperpolarisation. The cell so quickly returns to its natural potential that it
+`overshoots' and is temporarily negatively charged with respect to the natural
+potential, making it less sensitive to input for a short time after having
+created the peak.
 
 % \begin{figure}[ht]
 %     \centering
@@ -104,25 +110,24 @@ signals do not instigate a new response.
 \subsection{The LIF model}
 In order to emulate the behaviour electronically, a leaky integrate and fire
 (LIF) model is used. A single neuron is represented by an electronic circuit
-like the one in figure \ref{fig:circuit}. When the chip is not excited, nor
-inhibited there is a constant ``leak'' voltage present on the membrane,
+like the one in figure \ref{fig:circuit}. A constant ``leak'' voltage present on the membrane,
 representing the biological rest potential of the membrane potential.  The neuron,
 represented as a capacitor with capacitance $C_m$ is charged and decharged
 by the input of other neurons. With constant excitatory (facilitating spikes) and
 inhibitory (suppressing spikes) potential,  all dynamics are encoded in the
-time-dependent conductances $g_j(t),  g_x(t)$.  A spike coming from either
-of these two synapses is implemented by temporarily increasing the corresponding
-conductance.  When the threshold voltage $V_\text{thres}$,  is reached,
-the amplifier functioning as a comparator in this setting,  sends out a
-$V_{CC}$ signal to a digital unit that processes that the neuron has fired
-and is responsible for closing the switch that keeps the
-``membrane potential'' $V_m$ at some $V_\text{reset}$ for the refractory
-period. This time is meant to mimic the period the voltage at the membrane
-increases non-linearly and therefore loses its sensitivity to input. The digital
-processing unit is also responsible for sending the signal (in terms of a
-uniform spike; ''All-or-nothing reponse'') to the neurons that the are
-connected to one that just fired.  The synapses then transform this voltage
-spike into an excitatory or inhibitory input for the other neurons.
+time-dependent conductances $g_i(t),  g_x(t)$.  A spike coming from either
+of these two synapse types is implemented by temporarily increasing the
+corresponding conductance.  When the threshold voltage $V_\text{thres}$,  is
+reached, the amplifier functioning as a comparator in this setting,  sends out a
+$V_{CC}$ signal to a digital unit that processes that the neuron has fired and
+is responsible for closing the switch that keeps the ``membrane potential''
+$V_m$ at some $V_\text{reset}$ for the refractory period. This time is meant to
+mimic the period during which the voltage at the membrane increases non-linearly
+and therefore loses its sensitivity to input. The digital processing unit is
+also responsible for sending the signal (in terms of a uniform spike;
+``All-or-nothing reponse'') to the neurons that the are connected to the one that
+just fired.  The synapses then transform this voltage spike into an excitatory
+or inhibitory input for the other neurons.
 
 \begin{figure}[ht]
     \centering
@@ -132,14 +137,12 @@ spike into an excitatory or inhibitory input for the other neurons.
         \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
         \draw (0, 0)    to[vR, l=$g_l$, *-] (0, -2)
                         to[battery1, l=$E_l$] (0, -3) node[ground] {} (0, -4);
-        \draw (2, 0)    to[vR, l=$g_x$, *-] (2, -2)
-                        to[battery1, l=$E_x$] (2, -3) node[ground] {} (2, -4);
-        \draw (4, 0)    to[vR, l=$g_i$, *-] (4, -2)
-                        to[battery1, l=$E_g$] (4, -3) node[ground] {} (4, -4);
+        \draw (2, 0)    to[vR, l=$g_{x, j}$, *-] (2, -2)
+                        to[battery1, l=$E_{x, j}$] (2, -3) node[ground] {} (2, -4);
+        \draw (4, 0)    to[vR, l=$g_{i, j}$, *-] (4, -2)
+                        to[battery1, l=$E_{g, j}$] (4, -3) node[ground] {} (4, -4);
         \draw (6, 0)    to[C, l=$C_m$] (6, -2)
                         node[ground] {} (6, -2);
-        \draw (8, -3)   to[short, l_=$V_\text{reset}$, o-] (8, -1)
-                        to[normal open switch, -*] (8, 0);
         \draw (7.5, -2) node[anchor=north] {$V_\text{reset}$}
                         to[short, o-] (7.5, -1)
                         to[normal open switch, -*] (7.5, 0);
@@ -173,9 +176,9 @@ inhibitory inputs.  This reduces the circuit of figure \ref{fig:circuit}
 to the dashed square drawn inside of it. The relevant parameters
 that appear in figure are:
 \begin{itemize}
-    \item $E_l$ setting the \textit{amount} of potential leaking into the `membrane'.
-    \item $g_l$ determining how \textit{quickly} the potential leaks into the `membrane'.
-    \item $C_m$ describing how much potential is leaked to ground.
+    \item $E_l$ setting the \textit{amount} of potential leaking into the `membrane',
+    \item $g_l$ determining how \textit{quickly} the potential leaks into the `membrane',
+    \item $C_m$ describing how much potential is leaked to ground,
     \item $V_\text{reset}$ prescribing the starting point of a cycle.
 \end{itemize}
 
@@ -201,7 +204,7 @@ The threshold voltage of $V_{th} = -55$ mV was approached up to $5$ mV.  The
 reset voltage of $E_r = -80$ mV was not precisely reached.  After each recovery
 of the voltage we observed strong fluctuations of the reset voltage.  We
 furthermore calculated the time between spikes and found a value of
-$t_{fir} = (16.10\pm 0.11)$ ms.  From figure \ref{fig:membranes_ex1} it becomes 
+$t_{fir} = (16.10\pm 0.11)$ ms.  From figure \ref{fig:membranes_ex1} it becomes
 apparent that in this simple setup the neuron behaves as a capacitor that is
 being charged.  The firing rate could be increased by increasing either the
 leakage conductance,  leakage voltage or threshold voltage or by decreasing
@@ -505,7 +508,7 @@ firing rate for each neuron and plot it against the CVs of inter-spike intervals
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/activity_sweep.png}
-    \caption{Parameter sweep of $w$ and $K$ to determine their effect on the activity 
+    \caption{Parameter sweep of $w$ and $K$ to determine their effect on the activity
     of the neurons.  Activity is encoded in the colour scheme shown on the z-axis.}
     \label{fig:activity_sweep}
 \end{figure}
