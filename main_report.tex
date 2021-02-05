@@ -427,11 +427,14 @@ be shutdown entirely if one neuron fails for whatever reason. Hence the concept
 of populations is introduced, these are groups of neurons that perform the same
 logical operations\footnote{That is to say, they are all either inhibitory or
 excitatory neurons, they have the same neurons as inputs and the share the same
-output neurons.} This is visualised in figure \ref{fig:feed-forward}.
+output neurons and share the same characteristics. Variations may be introduced
+from a normal distribution. Note that this definition matches well with pyNN,
+but might not be used identically in all literature.} This is visualised in
+figure \ref{fig:feed-forward}.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=.3\textwidth]{figures/feedforwardnetwork-cropped.png}
+    \includegraphics[width=.3\textwidth]{figures/feedforward-real.png}
     \caption{Feed forward network with length 4 and population size 2. Two input
         neurons are drawn additionally. Exhibitory neurons and connections are drawn
         in red, inhibitory ones in blue.}
