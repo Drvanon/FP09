@@ -23,50 +23,53 @@
 
 \clearpage
 \begin{abstract}
-    In this paper we examine the SPIKEY Chip for neuromorphic computing and
-    come to the conclusion that though it is useful for prototyping neural
-    networks in a hardware fashion, it is likely not ready for real life
-    applications as the electronics are too sensitive to environmental
-    factors. Methods for calibrating individual neurons as well as networks
-    are suggested.
+    This paper presents a review of the SPIKEY chip for neuromorphic
+    computing.  After a theoretical framework outlining the requirements
+    for a simple neuromorphic computing device has been given, this
+    specific hardware realization will be examined under these considerations.
+    It will be shown that the SPIKEY chip exhibits all of the bas`
 \end{abstract}
 
 \section{Theoretical Foundations}
 \subsection{General background}
 \subsubsection{Motivation}
-Brains and computers often are compared because of their shared purpose,
+Brains and computers often are compared because of their shared purpose:
 decision making, though they have irreconcilable differences in architecture.
 Modern computers function on the basis of the van Neumann
 architecture\cite{von-Neumann}, which separates the control unit from the memory
-and the computation unit. Though it simplifies the structure of the computer and
-makes it modular, it does create a clear bottleneck at the communication layer,
-commonly known as the von Neumann bottleneck. This creates an energy
-inefficiency that is absolutely unacceptable for biological systems like that of
-humans, who spend around 20\% of its total energy uptake on the brain\cite{metabolic-rates}.
-This most likely has provided significant evolutionary pressure for hominids to
-optimize metabolic resource usage\cite{seymour2016fossil}. For this reason a new
-architecture for computers has been suggested: neuromorphic\footnote{``Neuro''
-as in brain, ``-morphic'' as in having the shape of, forming ``having the shape
-of a brain''.} computing.
+and the computation unit. Though this simplifies the structure of the computer
+and makes it modular, it however does create a clear bottleneck at the
+communication layer, commonly known as the von Neumann bottleneck. This creates
+an energy inefficiency that is unacceptable for biological systems like that of
+humans, who spend around 20\% of their total energy uptake on the
+brain\cite{metabolic-rates}.  This most likely has provided significant
+evolutionary pressure for hominids to optimize metabolic resource
+usage\cite{seymour2016fossil}. For this reason a new architecture for computers
+has been suggested: neuromorphic\footnote{``Neuro'' as in brain, ``-morphic'' as
+in having the shape of, forming ``having the shape of a brain''.} computing.
+Besides more efficient energy usage,  the scientific interest in neuromorphic
+computing is also grounded in the idea of trying to understand the human brain
+by rebuilding it artificially.
 
 \subsubsection{Signal processing in the brain}
-Neurons are the basic computational components of the
-brain, transmitting and morphing signals. Each neuron receives signals from
-others at the dendrites, which shift the electric potential at the membrane of
-the cell at the site of the synapse\footnote{The connection point of two
-dendrites where the axon of one meets the dendrite of the other.}, creating an
-ion wave crossing the entire membrane of the neuron, reaching it's axon,
-allowing it to pass the signal on to other neurons.
+Neurons are the basic computational components of the brain, transmitting and
+morphing signals. Each neuron receives signals from others at the dendrites,
+which shift the electric potential at the membrane of the cell at the site of
+the synapse\footnote{Synapse: the connection point of two dendrites where the
+axon of one meets the dendrite of the other.}. Once a critical amount of
+potential has been built up, an ion wave crossing the entire membrane of the
+neuron, reaching it's axon, allowing it to pass the signal on to other neurons.
 
-The potential at the neuron membrane as a function of time is plotted in figure
-\ref{fig:action-potential}, here it is demonstrated how a potential shift caused
-by pre-synaptic\footnote{That is the neuron that passes on a signal to the
-post-synaptic one.} neurons initiates a spike in the membrane potential, which
-forces a release of ion containing vesicles at the terminal
-bulb\footnote{\textbf{Terminal bulb}: the collections of appendages at the end
-of the axon that it uses to pass the signal on to connected neurons.},
-facilitating the transfer of the signal by changing the relative potential at
-the dendrites.
+The potential at the neuron membrane as a function of time has three main
+domains: first there is the rest voltage, where the membrane potential is at its
+natural equilibrium, which gets perturbed by synaptic input. Pumps in the cell
+membrane cause the potential to return to an equilibrium. If sufficient signals
+arrive at the neuron with a run away effect is induced, where the potential
+exponentially increases, until it hits a maximum, leading into a third phase:
+hyperpolarisation. The cell so quickly returns to its natural potential that it
+`overshoots' and is temporarily negatively charged with respect to the natural
+potential, making it less sensitive to input for a short time after having
+created the peak.
 
 \begin{figure}[ht]
     \centering
@@ -78,18 +81,24 @@ the dendrites.
 \subsubsection{The LIF model}
 In order to emulate the behaviour electronically, a leaky integrate and fire
 (LIF) model is used. A single neuron is represented by an electronic circuit
-like the one in figure \ref{fig:circuit}. When the chip is not excited, nor
-inhibited there is a constant ``leak'' voltage present on the membrane,
-representing the biological rest potential of the membrane potential. When the
-threshold voltage $V_\text{thres}$, the amplifier functioning as a comparator in
-this setting, sends out a $V_{CC}$ signal to a digital unit that processes that
-the neuron has fired and is responsible for closing the switch that keeps the
-``membrane potential'' $V_m$ at some $V_\text{reset}$ for the refractory
-period. This time is meant to mimic the period the voltage at the membrane
-increases non-linearly and therefore loses its sensitivity to input. The digital
-processing unit is also responsible for sending the signal (regardless of if it
-is inhibitory or excitatory) to the neurons that the are connected to one that
-just fired.
+like the one in figure \ref{fig:circuit}. A constant ``leak'' voltage present on
+the membrane, representing the biological rest potential of the membrane
+potential.  The neuron, represented as a capacitor with capacitance $C_m$ is
+charged and decharged by the input of other neurons. With constant excitatory
+(facilitating spikes) and inhibitory (suppressing spikes) potential,  all
+dynamics are encoded in the time-dependent conductances $g_i(t),  g_x(t)$. A
+spike coming from either of these two synapse types is implemented by
+temporarily increasing the corresponding conductance. When the threshold
+voltage $V_\text{thres}$,  is reached, the amplifier functioning as a comparator
+in this setting,  sends out a $V_{CC}$ signal to a digital unit that processes
+that the neuron has fired and is responsible for closing the switch that keeps
+the ``membrane potential'' $V_m$ at some $V_\text{reset}$ for the refractory
+period. This time is meant to mimic the period during which the voltage at the
+membrane increases non-linearly and therefore loses its sensitivity to input.
+The digital processing unit is also responsible for sending the signal (in terms
+of a uniform spike; ``All-or-nothing reponse'') to the neurons that the are
+connected to the one that just fired.  The synapses then transform this voltage
+spike into an excitatory or inhibitory input for the other neurons.
 
 \begin{figure}[ht]
     \centering
@@ -97,16 +106,14 @@ just fired.
         \draw (0, 0)    to node[midway, above]{$V_m$} (8.5, 0) node[op amp, anchor=+](A1){}; % main line
         \draw (A1.out)  to[short, l=$V_\text{out}$, -o] ++(1, 0);
         \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
-        \draw (0, 0)    to[vR, l=$g_l$, *-] (0, -2)
-                        to[battery1, l=$E_l$] (0, -3) node[ground] {} (0, -4);
-        \draw (2, 0)    to[vR, l=$g_x$, *-] (2, -2)
-                        to[battery1, l=$E_x$] (2, -3) node[ground] {} (2, -4);
-        \draw (4, 0)    to[vR, l=$g_i$, *-] (4, -2)
-                        to[battery1, l=$E_g$] (4, -3) node[ground] {} (4, -4);
+        \draw (0, 0)    to[vR, l=$g_{i, j}$, *-] ++(0, -2)
+                        to[battery1, l=$E_{i, j}$] ++(0, -1) node[ground] {} ++(0, -1);
+        \draw (2, 0)    to[vR, l=$g_{x, j}$, *-] ++(0, -2)
+                        to[battery1, l=$E_{x, j}$] ++(0, -1) node[ground] {} ++(0, -1);
+        \draw (4, 0)    to[vR, l=$g_l$, *-] ++(0, -2)
+                        to[battery1, l=$E_l$] ++(0, -1) node[ground] {} ++(0, -1);
         \draw (6, 0)    to[C, l=$C_m$] (6, -2)
                         node[ground] {} (6, -2);
-        \draw (8, -3)   to[short, l_=$V_\text{reset}$, o-] (8, -1)
-                        to[normal open switch, -*] (8, 0);
         \draw (7.5, -2) node[anchor=north] {$V_\text{reset}$}
                         to[short, o-] (7.5, -1)
                         to[normal open switch, -*] (7.5, 0);
@@ -149,7 +156,7 @@ understood with application of the Kirchoff formula to the circuit in figure
 \[
     C_m \frac{dV_m}{dt} = g_l(E_l - V_m)
 \]
-Clearly, this is a ordinary first order differential equation and has the
+This is a ordinary first order differential equation and has the
 solution
 \begin{equation}
     V_m(t) = A \exp(\frac{-g_l}{C_m}t) - E_l
@@ -160,64 +167,63 @@ where $A$ is given by the initial condition:
     A = V_m(0) - E_l.
 \]
 
-In order to set a neuron to fire at a regular frequency $\tau_m$, we have to take
+In order to set a neuron to fire at a regular frequency $\tau$, we have to take
 into account that $V_m$ will be reset to $V_\text{reset}$ when it hits
 $V_\text{thres}$. Equation \eqref{eq:diff-eq-sol} can be rephrased in terms of
 $t$.
 \begin{equation}
-    \tau_m = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
+    \tau = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
     \frac{C_m}{g_l}
     \label{eq:tau}
 \end{equation}
 
-The characteristic time constant $\tau_c$ of the system can be found by setting
+The characteristic time constant $\tau_m$ of the system can be found by setting
 $V_\text{thres}$ as a function of $E_l$ and $V_\text{reset}$.
 \[
     V_\text{thres} = E_l - (E_l - V_\text{reset})\exp(-1)
 \]
-The resulting $\tau_c$ is then only dependent on $C_m$ and $g_l$:
+The resulting $\tau_m$ is then only dependent on $C_m$ and $g_l$:
 \begin{align*}
     \tau_m &= -\ln(\frac{E_l - (E_l - (E_l - V_\text{reset})\exp(-1))}{V_\text{reset} - E_l}) \frac{C_m}{g_l}\\
            &= -\ln(\frac{(E_l - V_\text{reset})\exp(-1))}{V_\text{reset} - E_l})\frac{C_m}{g_l} \\
-           &= \frac{C_m}{g_l} = \tau_c
+           &= \frac{C_m}{g_l}
 \end{align*}
 This time constant does not take into account the refractory period which should
-adds a fixed contribution. This was mentioned in equation \eqref{eq:tau}, but
-becomes relevant again when considering the total time.
-
-This describes a good theory of the neuron, however in reality there are some
-serious production artifacts that require calibration.
-
+add a fixed contribution. This describes a good theory of the firing  neuron,
+however in reality there are some serious production artifacts that require
+calibration.
 
 \subsection{A Single Neuron with Synaptic Input}
 
 \subsection{Short Term Plasticity}
 
 \subsection{Feed-Forward Networks}
-One of the simplest neural networks one can consider is the feed-forward
-network in which every neuron is arranged so that it passes on the signal it
-receives to the next. In nature, a single neuron firing has relatively little
-meaning until it is put in a larger context. Most of these contexts can be
-simplified by viewing them as `superpositions' feed forward networks. It is
-however important to consider that in nature robustness and redundancy is
-highly favored in critical systems. The function of a feed-forward network can
-be shutdown entirely if one neuron fails for whatever reason. Hence the concept
-of populations is introduced, these are groups of neurons that perform the same
+One of the simplest neural networks one can consider is the feed-forward network
+in which every neuron is arranged so that it passes on the signal it receives to
+the next. In nature, a single neuron firing has relatively little meaning until
+it is put in a larger context. Most of these contexts can be simplified by
+viewing them as `superpositions' feed forward networks. It is however important
+to consider that in nature robustness and redundancy is highly favored in
+critical systems. The function of a feed-forward network can be shutdown
+entirely if one neuron fails for whatever reason. Hence the concept of
+populations is introduced, these are groups of neurons that perform the same
 logical operations\footnote{That is to say, they are all either inhibitory or
-excitatory neurons, they have the same neurons as inputs and the share the same
-output neurons.} This is visualised in figure \ref{fig:feed-forward}.
+excitatory neurons and share the same characteristics. Variations may be
+introduced from a normal distribution. Note that this definition matches well
+with pyNN, but might not be used identically in all literature.} This is
+visualised in figure \ref{fig:feed-forward}.
 
 \begin{wrapfigure}{r}{0.5\textwidth}
     \centering
-    \includegraphics[width=.3\textwidth]{figures/feedforwardnetwork-cropped.png}
+    \includegraphics[width=.3\textwidth]{figures/feedforward-real.png}
     \caption{Feed forward network with length 4 and population size 2. Two input
-        neurons are drawn additionally. Exhibitory neurons and connections are drawn
+        neurons are drawn additionally. Inhibitory neurons and connections are drawn
         in red, inhibitory ones in blue.}
     \label{fig:feed-forward}
 \end{wrapfigure}
 
 In this experiment, connection weights also become relevant for the first time.
-Any synaptic connection is assigned a weight, this weight represents the
+Any synaptic connection is assigned a weight, this weight affects the
 membrane potential increase that a signal transfer induces. The importance of
 this variable is crucial for networks as it nearly completely describes the
 behaviour of a network.
@@ -225,10 +231,16 @@ behaviour of a network.
 \subsection{Recurrent Networks}
 
 \subsection{A Simple Computation - XOR}
-A very common binary operation that is particularly non-linear (and therefore
-more complex) is the XOR operation. It can be described with the truth table
-\ref{tab:XOR}.
-
+A very common binary operation that is particularly non-linear is the XOR
+operation\cite{horowitz_hill_2020}. A trivial solution for this problem was
+found (see figure \ref{fig:XOR-suggested}) and dismissed thanks to its probable
+fragility. Instead the institute provided a different network architecture that
+has significant benefits over the suggested one: it is much more robust to what
+is called referred to with `width' in section \ref{sec:feed-forward}. The
+inhibitory neurons that are operating in a recurrent fashion prevent leaking
+voltage from causing the any excitatory neuron in the network to fire out of
+line. This is especially important in an XOR gate, as the chance that noise
+would `cancel out' is negligible.
 \begin{table}[ht]
     \centering
     \begin{tabular}{c | c | c}
@@ -258,6 +270,15 @@ as the chance that noise would `cancel out' is negligible.
     \caption{Network that was used to test the ability of neurons to perform
         logical operations. Functions as an XOR gate.}
     \label{fig:XOR-used}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/XOR-suggested.png}
+    \caption{Suggestion for a network that behaves like an XOR gate. Note that
+        the inhibitory weight has to be strong, so that it can inhibit the output
+        from signalling, even when it receives an input from both sides.}
+    \label{fig:XOR-suggested}
 \end{figure}
 
 \section{Experimental Procedure}
@@ -476,9 +497,9 @@ type connections:
         (inh $\rightarrow$ ex)
 \end{itemize}
 This coincidentally is also the order of sensitivity (top being most sensitive),
-particularly when discussing the `width' of the signal. With this is meant the
-the amount of consequent signals that follow a single input signal. When having
-a large population, a high (inh $\rightarrow$ ex) wheight was capable of
+particularly when discussing the `width' of the signal. This was measured
+quantitatively by measuring how many signals were caused by a single input. When
+having a large population, a high (inh $\rightarrow$ ex) weight was capable of
 stopping the signal before it would reach the last neuron.
 
 An issue that occurred as the chain length was increased the width of the signal
@@ -490,18 +511,20 @@ a chain is 192, so that for a population of size $n$ the max chain length
 $c_\text{max}$ would be $c_\text{max} = 192 / n$.
 
 An interesting phenomena occurs when the network is configured to loop. That is
-to say the last neuron excites the first. Sadly it was not possible to set the
-signal delay, which would have allowed for more careful investigation, but still
-there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
+to say the last neuron excites the first. It was not possible to set the
+signal delay, which would have allowed for more careful investigation, by being
+able to see which signals were caused by an excitatory neuron signaling too
+often and what was the next round of signals, but still there was a clear effect
+visible in figure \ref{fig:feed-forward-loop}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{figures/feedforward signals loop.png}
-    \caption{Feed-forward network configured in a loop. The population is 5, as
-        is the chain length. Note that at the end the width starts to increase.
-        The top figure shows all signals send by the neurons. The blue area
-        represents inhibitory neurons, the red excitatory. The bottom figure
-        shows the membrane potential of the first excitatory neuron.}
+    \includegraphics[width=.5\textwidth]{figures/feedforward-signals-loop.png}
+    \caption{Feed-forward network configured in a loop. The population size is
+        5, as is the chain length. Note that at the end the width starts to
+        increase.  The top figure shows all signals send by the neurons. The
+        blue area represents inhibitory neurons, the red excitatory. The bottom
+        figure shows the membrane potential of the first excitatory neuron.}
     \label{fig:feed-forward-loop}
 \end{figure}
 
@@ -528,10 +551,11 @@ internal expectation for when each neuron should fire or not.
 
 It quickly became clear that though a temporarily optimal configuration had been
 found, it was not to last long, as a mere half hour later the accuracy had
-dropped from 39/40 to 33/40. However the accuracy was large enough to show that
-as the input was temporally shifted using a normal distribution, it did not
-immediately lose it's accuracy. Only after the FWHM of the jitter became larger
-than 15 milliseconds, the accuracy dropped below unrecognizable. This is
+dropped from 39/40 to 33/40, confirming suspicions from earlier experiments.
+However the accuracy was large enough to show that as the input was temporally
+shifted using a normal distribution, it did not immediately lose it's accuracy.
+Only after the standard deviation of the jitter became larger than 15
+milliseconds, network was unable to give a correct output anymore. This is
 remarkable fact is likely due to the fact that the potential does not
 immediately decay to the rest potential but remains high for some some time.
 This could be useful in applications where signals are not perfectly timed, but
@@ -543,7 +567,7 @@ Our results clearly show that the SPIKEY chip can be used for experimenting with
 neuromorphic computing in the physical world. Most importantly, it could
 verified that the elementary building block (LIF-circuit) behaved in a very
 favourable way. Different characteristic features in different realizations of
-that circuit in the hardware (due to production errors) can be observed but it
+that circuit in the hardware (due to production variations) can be observed but it
 was shown to be possible to calibrate each  ``neuron'' in a way that the effect
 of production errors is mostly cancelled. The circuit allows short term
 plasticity,  a key trait of neurons that allows them to `learn'.  Finally,
@@ -551,22 +575,23 @@ leaving the few-neuron regime, it was verified that the hardware can be used to
 model circuits with $\approx 200$ neurons, even binary logic was achievable with
 the hardware.
 
-However thanks to the temporal instability of the chip it is clearly not
-production ready. It is hard to think of a critical application that would have
-environmental conditions suited for this chip, that would be simultaneously cost
-effective. Calibration would likely be sufficiently time consuming that it would
-ruin any cost effectiveness. That is not to say that it is without application
-in the world of research, where it can be a useful tool to investigate behaviour
-of neural structures by making it behave like physical neurons.
+However thanks to the temporal instability of the chip and its production
+variations it is not production ready. It is hard to think of a critical
+application that would have environmental conditions suited for this chip, that
+would be simultaneously cost effective. Calibration would likely be sufficiently
+time consuming that it would ruin any cost effectiveness. That is not to say
+that it is without application in the world of research, where it can be a
+useful tool to investigate behaviour of neural structures by making it behave
+like physical neurons.
 
 \section{Discussion}
 Comparing our quite complicated realization of the XOR-gate to the standard
 electrical implementation of the binary gate in digital computing leads us to
 one final important insight: When switching computer hardware to neuromorphic
 hardware, it does not suffice to merely copy the brain's architecture and
-continue to use boolean logic like is done in modern computers. It is far too
-fragile, requiring an enormous amount of neurons and an inefficient use of
-compute power.
+continue to use boolean logic like is done in conventional computers. It is far
+too fragile, requiring an enormous amount of neurons and an inefficient use of
+computation power.
 
 Instead, if neuromorphic computing is to become an integral part of
 computational methods, it is key the field adapts to the biological blueprint.
@@ -574,13 +599,13 @@ Naturally that would inspire radically new ways of problem solving in signal
 processing.
 
 Before that is reached however, a stark increase in the stability of the
-hardware is required, as even a jelly fish has over 5000 neurons
-\cite{neuronsjellyfish}. This paper has provided a qualitative review of the
-chip, however quantitative measurements are still lacking. We hypothesize that
-temporal differences in the internal temperature of the chip is likely the main
-culprit of this instability, therefore describing both the sensitivity to a
-change in temperature and heat generation by the chip during average usage could
-be useful indicators of the chips ability to perform consistently.
-
+hardware is required, as well as an increase in available neurons, as even a
+jelly fish has over 5000 neurons \cite{neuronsjellyfish}. This paper has
+provided a qualitative review of the chip, however quantitative measurements are
+still lacking. We hypothesize that temporal differences in the internal
+temperature of the chip is likely the main culprit of this instability,
+therefore describing both the sensitivity to a change in temperature and heat
+generation by the chip during average usage could be useful indicators of the
+chips ability to perform consistently.
 
 \end{document}
