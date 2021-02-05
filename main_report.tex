@@ -135,22 +135,22 @@ or inhibitory input for the other neurons.
         \draw (0, 0)    to node[midway, above]{$V_m$} (8.5, 0) node[op amp, anchor=+](A1){}; % main line
         \draw (A1.out)  to[short, l=$V_\text{out}$, -o] ++(1, 0);
         \draw (7, 1)    node[left, above] {$V_\text{thres}$} to[short, *-] (A1.-);
-        \draw (0, 0)    to[vR, l=$g_l$, *-] (0, -2)
-                        to[battery1, l=$E_l$] (0, -3) node[ground] {} (0, -4);
-        \draw (2, 0)    to[vR, l=$g_{x, j}$, *-] (2, -2)
-                        to[battery1, l=$E_{x, j}$] (2, -3) node[ground] {} (2, -4);
-        \draw (4, 0)    to[vR, l=$g_{i, j}$, *-] (4, -2)
-                        to[battery1, l=$E_{g, j}$] (4, -3) node[ground] {} (4, -4);
+        \draw (0, 0)    to[vR, l=$g_{i, j}$, *-] ++(0, -2)
+                        to[battery1, l=$E_{i, j}$] ++(0, -1) node[ground] {} ++(0, -1);
+        \draw (2, 0)    to[vR, l=$g_{x, j}$, *-] ++(0, -2)
+                        to[battery1, l=$E_{x, j}$] ++(0, -1) node[ground] {} ++(0, -1);
+        \draw (4, 0)    to[vR, l=$g_l$, *-] ++(0, -2)
+                        to[battery1, l=$E_l$] ++(0, -1) node[ground] {} ++(0, -1);
         \draw (6, 0)    to[C, l=$C_m$] (6, -2)
                         node[ground] {} (6, -2);
         \draw (7.5, -2) node[anchor=north] {$V_\text{reset}$}
                         to[short, o-] (7.5, -1)
                         to[normal open switch, -*] (7.5, 0);
         \draw [densely dashed]
-              (3.3, -4) --++(0, 4.6)
-                        --++(5, 0)
-                        --++(0, -4.6)
-                        --++(-5, 0);
+              (3.3, -4) --++(0, 6)
+                        --++(9, 0)
+                        --++(0, -6)
+                        --++(-9, 0);
     \end{circuitikz}
     \caption{Circuit of a single neuron in a LIF chip.}
     \label{fig:circuit}
@@ -220,7 +220,7 @@ box of figure \ref{fig:circuit}.
 \[
     C_m \frac{dV_m}{dt} = g_l(E_l - V_m)
 \]
-Clearly, this is a ordinary first order differential equation and has the
+This is a ordinary first order differential equation and has the
 solution
 \begin{equation}
     V_m(t) = A \exp(\frac{-g_l}{C_m}t) - E_l
@@ -231,33 +231,29 @@ where $A$ is given by the initial condition:
     A = V_m(0) - E_l.
 \]
 
-In order to set a neuron to fire at a regular frequency $\tau_m$, we have to take
+In order to set a neuron to fire at a regular frequency $\tau$, we have to take
 into account that $V_m$ will be reset to $V_\text{reset}$ when it hits
 $V_\text{thres}$. Equation \eqref{eq:diff-eq-sol} can be rephrased in terms of
 $t$.
 \begin{equation}
-    \tau_m = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
+    \tau = -\ln(\frac{V_\text{thres} - E_l}{V_\text{reset} - E_l})
     \frac{C_m}{g_l}
     \label{eq:tau}
 \end{equation}
 
-The characteristic time constant $\tau_c$ of the system can be found by setting
+The characteristic time constant $\tau_m$ of the system can be found by setting
 $V_\text{thres}$ as a function of $E_l$ and $V_\text{reset}$.
 \[
     V_\text{thres} = E_l - (E_l - V_\text{reset})\exp(-1)
 \]
-The resulting $\tau_c$ is then only dependent on $C_m$ and $g_l$:
+The resulting $\tau_m$ is then only dependent on $C_m$ and $g_l$:
 \begin{align*}
     \tau_m &= -\ln(\frac{E_l - (E_l - (E_l - V_\text{reset})\exp(-1))}{V_\text{reset} - E_l}) \frac{C_m}{g_l}\\
-           &= -\ln(\frac{(E_l - V_\text{reset})\exp(-1))}{V_\text{reset} - E_l})\frac{C_m}{g_l} \\
-           &= \frac{C_m}{g_l} = \tau_c
+           &= \frac{C_m}{g_l}
 \end{align*}
 This time constant does not take into account the refractory period which should
-adds a fixed contribution. This was mentioned in equation \eqref{eq:tau}, but
-becomes relevant again when considering the total time.
-
-This describes a good theory of the neuron, however in reality there are some
-serious production artifacts that require calibration.
+add a fixed contribution. This describes a good theory of the neuron, however
+in reality there are some serious production artifacts that require calibration.
 
 % execution
 On the SPIKEY chip 4 neurons were isolated programmatically and given the same
@@ -269,13 +265,13 @@ parameters:
     \item $g_\text{leak}$:  \SI{20.0}{\nano\siemens}
 \end{itemize}
 
-This however resulted in wildly differing frequencies. In order to compensate
+This however resulted in wildly differing firing rates. In order to compensate
 for this $g_l$ was adjusted individually for all of the membranes so that they
 were all correct within their respective standard deviation:
-\SI{20.1}{\milli\volt}, \SI{55.0}{\milli\volt}, \SI{60.0}{\milli\volt},
-\SI{20.5}{\milli\volt}.
+\SI{20.1}{\nano\siemens}, \SI{55.0}{\nano\siemens}, \SI{60.0}{\nano\siemens},
+\SI{20.5}{\nano\siemens}.
 
-The scale of the problem becomes even more clear when considering the that one
+The scale of the problem becomes even more clear when considering that one
 half of the SPIKEY chip has a rate distribution like presented in figure
 \ref{fig:distribution}, the previous method of trial and error becomes rather
 infeasible.
@@ -283,24 +279,23 @@ infeasible.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=.5\textwidth]{figures/rate-distribution.png}
-    \caption{Distribution of firing rate for the same across one side of the
-    chip.}
+    \caption{Distribution of firing rate for the same leak potential across one
+    side of the chip.}
     \label{fig:distribution}
 \end{figure}
 
 Instead an algorithm is suggested that should help find a proper calibration for
 all neurons that are able to converge on the desired rate.
 \begin{enumerate}
-    \item Set the $g_l$ to the default value and measure the rate of the neuron.
-    \item Set the $g_l$ to double the default value and measure the rate of the
+    \item Set $g_l$ to the default value and measure the rate of the neuron.
+    \item Set $g_l$ to double the default value and measure the rate of the
         neuron.
     \item Describe the response of the neuron linearly using the last two
         points and estimate where the desired rate would lie.
-    \item Set the $g_l$ to this value and measure the rate, if it is within the
+    \item Set $g_l$ to this value and measure the rate, if it is within the
         standard error: success! If not return to step 3.
 \end{enumerate}
-Sadly we were unable to implement the algorithm, but we encourage the reader
-to.
+Implementation of this algorithm has been left for as an exercise the reader.
 
 \subsection{A Single Neuron with Synaptic Input}
 Interconnectivity between neurons is crucial since this forms the basis of
@@ -323,7 +318,7 @@ and $\text{drvifall}=1.3$.
  \begin{figure}[ht]
      \centering
      \includegraphics[width=.5\textwidth]{figures/epsp_summary.png}
-     \caption{EPSPs for excitatory input with different drviout,  drvifall 
+     \caption{EPSPs for excitatory input with different drviout,  drvifall
      parameters}
      \label{fig:epsp_default}
  \end{figure}
@@ -382,7 +377,7 @@ found with the considerable standard deviation of $1.17$mV.  This is shown in
 \ref{MaxVoltHisto}.
 \begin{figure}
 		\includegraphics[width=0.5\textwidth]{figures/histo_maxVolt.pdf}
-		\caption{Histogram of the peak heights (voltage diffeerence) for stimulation 
+		\caption{Histogram of the peak heights (voltage diffeerence) for stimulation
 		of different neurons}
 		\label{MaxVoltHisto}
 \end{figure}
@@ -486,7 +481,7 @@ there was a clear effect visible in figure \ref{fig:feed-forward-loop}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=.5\textwidth]{figures/feedforward signals loop.png}
+    \includegraphics[width=.5\textwidth]{figures/feedforward-signals-loop.png}
     \caption{Feed-forward network configured in a loop. The population is 5, as
         is the chain length. Note that at the end the width starts to increase.
         The top figure shows all signals send by the neurons. The blue area
@@ -521,8 +516,8 @@ and connection number (since we have inhibitory synapses).  Similarly,  a parame
 was done for the coefficient of variation.  Both procedures yield results with clear proportionalities
 between the quantity of interest and connection weight and number.  The fact that it is possible
 to find these relationships qualifies the SPIKEY chip as a noise source for other neuromorphic
-devices since the average frequency of random spikes can be controlled (activity) 
-and besides the frequency stochastic properties of the noise can be determined  
+devices since the average frequency of random spikes can be controlled (activity)
+and besides the frequency stochastic properties of the noise can be determined
 (by choosing the CV).
 
 
