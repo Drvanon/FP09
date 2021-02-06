@@ -10,6 +10,8 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
 \newcommand{\uuline}[1]{\underline{\underline{#1}}}
 
 \author{\textbf{Students: }Robin Dorstijn, Moritz Epping \\ \textbf{Tutor: }Jakob Kaiser}
@@ -272,14 +274,14 @@ as the chance that noise would `cancel out' is negligible.
     \label{fig:XOR-used}
 \end{figure}
 
-\begin{figure}
+\begin{wrapfigure}{r}{0.5\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figures/XOR-suggested.png}
+    \includegraphics[width=.3\textwidth]{figures/XOR-suggested.png}
     \caption{Suggestion for a network that behaves like an XOR gate. Note that
         the inhibitory weight has to be strong, so that it can inhibit the output
         from signalling, even when it receives an input from both sides.}
     \label{fig:XOR-suggested}
-\end{figure}
+\end{wrapfigure}
 
 \section{Experimental Procedure}
 
@@ -325,13 +327,21 @@ were all correct within their respective standard deviation:
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{figures/4membranes.png}
-    \caption{Biological membrane potential of four membranes with the same
+    \begin{subfigure}[t]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/4membranes.png}
+        \caption{Uncalibrated membranes}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/4membranes-calibrated.png}
+        \caption{Calibrated membranes}
+    \end{subfigure}
+    \caption{(a) Biological membrane potential of four membranes with the same
     setting. The red dots indicate when the digital processing units recognizes
     that voltage reaches the threshold. The rates for the signals are
     \SI{1.02(2)e1}{\milli\second}, \SI{2.41(3)e1}{\milli\second},
     \SI{2.36(1)e1}{\milli\second}, \SI{1.15(1)e1}{\milli\second}, in the same
-    order that they presented in the image. }
+    order that they presented in the image.
+    (b) The same 4 membranes after having been calibrated manually.}
     \label{fig:4membranes}
 \end{figure}
 
