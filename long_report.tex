@@ -230,6 +230,28 @@ membrane potential increase that a signal transfer induces. The importance of
 this variable is crucial for networks as it nearly completely describes the
 behaviour of a network.
 
+A synfire\footnote{Synfire: a type of feed forward network that is a simple
+    chain of single excitatory neurons coupled in succession. Alternative
+    structures are described as feed forward networks as well, for example
+    situations where each excitatory neuron connects to at least two other
+    neurons in the next layer.  These structures are more complicated and out of
+the scope of this report.} feed-forward network is described by the population
+number, the chain length (see figure \ref{fig:feed-forward}) and the several
+weights of the following type connections:
+
+\begin{itemize}
+    \item From the initial excitatory neuron to the first excitatory member of the
+        chain. (ex0 $\rightarrow$ ex)
+    \item From the initial excitatory neuron to the first inhibitory member of the
+        chain. (ex0 $\rightarrow$ inh)
+    \item From an excitatory neuron in the chain to the next excitatory neuron.
+        (ex $\rightarrow$ ex)
+    \item From an excitatory neuron in the chain to the next inhibitory neuron.
+        (ex $\rightarrow$ inh)
+    \item From an inhibitory neuron in the chain to the next excitatory neuron.
+        (inh $\rightarrow$ ex)
+\end{itemize}
+
 \subsection{Recurrent Networks}
 
 \subsection{A Simple Computation - XOR}
@@ -491,53 +513,84 @@ account to get correct results.
 \subsection{Short Term Plasticity}
 
 \subsection{Feed-Forward Networks}
-A feed-forward network is described by the population number, the chain length
-(see figure \ref{fig:feed-forward}) and the several weights of the following
-type connections:
-\begin{itemize}
-    \item From the initial excitatory neuron to the first excitatory member of the
-        chain. (ex0 $\rightarrow$ ex)
-    \item From the initial excitatory neuron to the first inhibitory member of the
-        chain. (ex0 $\rightarrow$ inh)
-    \item From an excitatory neuron in the chain to the next excitatory neuron.
-        (ex $\rightarrow$ ex)
-    \item From an excitatory neuron in the chain to the next inhibitory neuron.
-        (ex $\rightarrow$ inh)
-    \item From an inhibitory neuron in the chain to the next excitatory neuron.
-        (inh $\rightarrow$ ex)
-\end{itemize}
-This coincidentally is also the order of sensitivity (top being most sensitive),
-particularly when discussing the `width' of the signal. This was measured
-quantitatively by measuring how many signals were caused by a single input. When
-having a large population, a high (inh $\rightarrow$ ex) weight was capable of
-stopping the signal before it would reach the last neuron.
+Of particular interest in discussing sensitivity of the network to changes in
+the connection weights is the `width' of the signal, that is the amount of
+spikes fired by the network in response to a single input.
 
-An issue that occurred as the chain length was increased the width of the signal
-did as well. A length of 60 was reached creating a width of 10. This worked for
-low populations, however with higher populations the membrane voltage was
-overall raised to such a degree that the neurons started firing randomly and the
-signal was lost. The theoretical maximum amount of neurons that could be used in
-a chain is 192, so that for a population of size $n$ the max chain length
-$c_\text{max}$ would be $c_\text{max} = 192 / n$.
+On the SPIKEY chip the there are 15 distinguishable weights that can be
+assigned to a connection. 1 being the lowest possible connection strength and 15
+the highest.
 
-An interesting phenomena occurs when the network is configured to loop. That is
+It was found that easily underestimated connections are the ex->inh and inh->ex
+weights. When these are not activated, it is highly likely that the network will
+have a continually increasing width if no inhibition is performed at all (see
+figure \ref{fig:ff-expansion}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/feedforward-expansion.png}
+    \caption{Expansion of the width of a feed forward network when no inhibition
+        takes place. Weights used here were: ex0$\rightarrow$ex = 15, ex0 $\rightarrow$ inh = 12, ex $\rightarrow$ ex
+        = 15, ex $\rightarrow$ inh = 1, inh $\rightarrow$ ex = 1, in a chain of length 10 and a population
+        size of 3 (ex)}
+    \label{fig:ff-expansion}
+\end{figure}
+
+The longest open chain that was possible to be produced had a length of 48
+neurons. This was because the smallest possible population at which a
+consistent chain could be created was 3 for excitatory and 1 for the inhibitory
+part of the chain. Even when inhibition was set to 1 and the ex $\rightarrow$ ex
+connections were set 15, no output was generated when the population size of the
+excitatory neurons was 2. Having the population size so low, required the ex
+$\rightarrow$ ex connection strength to be near its maximal value (14) to be
+able to maintain the signal wave. This in turn meant that the inhibition could
+not be set sufficiently high and therefore the signal width keeps increasing as
+seen in figure \ref{fig:ff-open-3-1}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/feedforward-open.png}
+    \caption{Open chain at maximal length (48) with population size 3 for
+    excitatory neurons and 1 for inhibitory neurons. The weights used were ex0
+    $\rightarrow$ ex = 13, ex0 $\rightarrow$ inh = 7, ex $\rightarrow$ ex= 14,
+    ex $\rightarrow$ inh = 7, inh $\rightarrow$ ex = 15. The final width lies around
+    8.}
+    \label{fig:ff-open-3-1}
+\end{figure}
+
+In order to combat this effect an extra inhibitory neuron was added, shrinking
+the maximum length to 38 neurons, however this allowed for getting a very clean
+signal with an average width of only 1.2, as can be seen in figure
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/feedforward-open-better.png}
+    \caption{Open chain at maximal length (38) with population size 3 for
+    excitatory neurons and 2 for inhibitory neurons. The weights used were
+    ex0 $\rightarrow$ ex = 13, ex0 $\rightarrow$ inh = 7, ex $\rightarrow$ ex =
+    14, ex $\rightarrow$ inh = 10, inh $\rightarrow$ ex = 15. The final signal width
+    was about 2.}
+    \label{fig:ff-open-3-2}
+\end{figure}
+
+An interesting phenomena occurs when the network is configured to loop, that is
 to say the last neuron excites the first. It was not possible to set the
 signal delay, which would have allowed for more careful investigation, by being
 able to see which signals were caused by an excitatory neuron signaling too
 often and what was the next round of signals, but still there was a clear effect
-visible in figure \ref{fig:feed-forward-loop}.
+visible in figure \ref{fig:feed-forward-loop}. Note worthy is that this change
+of connection required a reconfiguring of the network, which indicates that
+creating connections changes the effective weights in the network.
 
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth]{figures/feedforward-signals-loop.png}
-    \caption{Feed-forward network configured in a loop. The population size is
-        5, as is the chain length. Note that at the end the width starts to
-        increase.  The top figure shows all signals send by the neurons. The
-        blue area represents inhibitory neurons, the red excitatory. The bottom
-        figure shows the membrane potential of the first excitatory neuron.}
+    \caption{Open chain at maximal length (38) with population size 3 for
+    excitatory neurons and 2 for inhibitory neurons. The weights used were
+    ex0 $\rightarrow$ ex = 15, ex0 $\rightarrow$ inh = 7, ex $\rightarrow$ ex =
+    14, ex $\rightarrow$ inh = 10, inh $\rightarrow$ ex = 15.}
     \label{fig:feed-forward-loop}
 \end{figure}
-
 
 \subsection{Recurrent Networks}
 
