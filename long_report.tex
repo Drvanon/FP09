@@ -607,7 +607,14 @@ internal expectation for when each neuron should fire or not.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{figures/XOR-output.png}
+    \begin{subfigure}[t]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/XOR-output.png}
+        \caption{Response of the network to jittered input.}
+    \end{subfigure}
+    \begin{subfigure}[t]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/XOR-succesful.png}
+        \caption{Calibrated network without jitter.}
+    \end{subfigure}
     \caption{Output of the diagnostic tool for rating the performance of the XOR network.}
     \label{fig:XOR-output}
 \end{figure}
